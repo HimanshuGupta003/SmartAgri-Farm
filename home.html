@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartAgriFarm - Innovative Agricultural Solutions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #228B22;
+            --primary-light: #2ecc71;
+            --bg-light: #e5f4e5;
+            --text-dark: #2c3e50;
+            --text-light: #ffffff;
+            --card-bg-light: #ffffff;
+            --accordion-bg-light: #e9ecef;
+            --accordion-active-light: #d1e7ff;
+            --accordion-active-text-light: #0056b3;
+            --chat-bg: #f8f9fa;
+            --chat-user-bubble: #e9f5fb;
+            --chat-bot-bubble: #e5f4e5;
+        }
+        
+        [data-bs-theme="dark"] {
+            --primary-color: #2ecc71;
+            --primary-light: #5fdca0;
+            --bg-light: #1a1a1a;
+            --text-dark: #e5e5e5;
+            --text-light: #e5e5e5;
+            --card-bg-light: #2c2c2c;
+            --accordion-bg-light: #2c2c2c;
+            --accordion-active-light: #1e5f3a;
+            --accordion-active-text-light: #ffffff;
+            --chat-bg: #2c2c2c;
+            --chat-user-bubble: #3a506b;
+            --chat-bot-bubble: #2c3e50;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            font-family: 'Arial', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(34, 139, 34, 0.7), rgba(34, 139, 34, 0.7)), 
+                        url('https://media.istockphoto.com/id/543212762/photo/tractor-cultivating-field-at-spring.jpg?b=1&s=612x612&w=0&k=20&c=OEKSWztY_quFD-ixXGvCiSp1zlHBsXzDugCnyQf6ERM=');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: var(--card-bg-light);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .bg-green-gradient {
+            background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s;
+        }
+        
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        
+        .faq-section {
+            width: 100%; 
+            margin: 0; 
+            padding: 20px;
+        }
+        
+        .accordion-button {
+            background-color: var(--accordion-bg-light);
+            font-weight: 600;
+        }
+        
+        .accordion-button:not(.collapsed) {
+            background-color: var(--accordion-active-light);
+            color: var(--accordion-active-text-light);
+        }
+        
+        .accordion-body {
+            background-color: var(--card-bg-light);
+        }
+        
+        .faq-header {
+            text-align: center;
+            color: var(--text-dark);
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background-color: var(--card-bg-light);
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle-wrapper {
+            display: flex;
+            align-items: center;
+        }
+        
+        #theme-toggle {
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+        
+        /* Dark mode specific styles */
+        [data-bs-theme="dark"] .navbar {
+            background-color: #222 !important;
+        }
+        
+        [data-bs-theme="dark"] .navbar-brand,
+        [data-bs-theme="dark"] .nav-link {
+            color: #e5e5e5 !important;
+        }
+        
+        [data-bs-theme="dark"] .btn-outline-success {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        [data-bs-theme="dark"] .btn-outline-success:hover {
+            background-color: var(--primary-color);
+            color: #212529;
+        }
+        
+        [data-bs-theme="dark"] .card-body h5,
+        [data-bs-theme="dark"] .card-body h3 {
+            color: var(--text-light);
+        }
+        
+        [data-bs-theme="dark"] .card-body p {
+            color: #cccccc;
+        }
+
+        /* Chatbot styles */
+        .chatbot-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .chatbot-container {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background-color: var(--card-bg-light);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 999;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+        }
+
+        .chatbot-close {
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .chatbot-messages {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: var(--chat-bg);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bot-message {
+            background-color: var(--chat-bot-bubble);
+            border-bottom-left-radius: 5px;
+            align-self: flex-start;
+        }
+
+        .user-message {
+            background-color: var(--chat-user-bubble);
+            border-bottom-right-radius: 5px;
+            align-self: flex-end;
+            color: var(--text-dark);
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .chatbot-input-container {
+            padding: 10px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            background-color: var(--card-bg-light);
+            display: flex;
+            align-items: center;
+        }
+
+        .chatbot-input {
+            flex-grow: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 8px 15px;
+            outline: none;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        .chatbot-send {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s ease;
+        }
+
+        .chatbot-send:hover {
+            background-color: var(--primary-light);
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 5px 15px;
+            background-color: var(--chat-bot-bubble);
+            border-radius: 18px;
+            max-width: 100px;
+            margin-bottom: 10px;
+            align-self: flex-start;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--text-dark);
+            border-radius: 50%;
+            margin: 0 3px;
+            opacity: 0.6;
+            animation: typingAnimation 1.2s infinite;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.8s;
+        }
+
+        @keyframes typingAnimation {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+
+        .suggested-questions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .question-chip {
+            background-color: var(--bg-light);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .question-chip:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Loading Spinner -->
+<div class="position-absolute top-50 start-50 translate-middle w-75 w-md-50">
+    <div class="card-body text-center p-3 p-md-4">
+        <div class="spinner-border text-success" style="width: 3rem; height: 3rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#">
+            <img src="https://img.icons8.com/ios-filled/50/228B22/leaf.png" width="30" height="30" alt="logo">
+            SmartAgriFarm
+        </a>
+        <div class="theme-toggle-wrapper">
+            <button id="theme-toggle" class="btn" aria-label="Toggle dark mode">
+                <i class="fas fa-sun"></i>
+            </button>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="product.html">Products</a></li>
+                <li class="nav-item"><a class="nav-link" href="harvest.html">Harvest Guide</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                <li class="nav-item ms-2">
+                    <a class="btn btn-outline-success" href="#">
+                        <i class="fas fa-shopping-cart"></i> Cart <span class="badge bg-success">0</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Breadcrumbs -->
+<div class="container mt-3">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-custom">
+            <li class="breadcrumb-item"><a href="#faq" class="text-success">FAQ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+        </ol>
+    </nav>
+</div>
+
+<!-- Hero Section -->
+<div class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-4">Transforming Agriculture with Smart Technology</h1>
+        <p class="lead mb-5">Innovative solutions for sustainable and efficient farming</p>
+        <a href="product.html" class="btn btn-light btn-lg text-success">
+            Explore Our Products <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container py-5">
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <div class="card card-hover h-100">
+                <div class="card-body">
+                    <i class="fas fa-solar-panel feature-icon"></i>
+                    <h3 class="card-title">Renewable Energy</h3>
+                    <p class="card-text">Sustainable power solutions for modern agriculture</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card card-hover h-100">
+                <div class="card-body">
+                    <i class="fas fa-satellite feature-icon"></i>
+                    <h3 class="card-title">Precision Monitoring</h3>
+                    <p class="card-text">Advanced crop and farm management technologies</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card card-hover h-100">
+                <div class="card-body">
+                    <i class="fas fa-water feature-icon"></i>
+                    <h3 class="card-title">Smart Irrigation</h3>
+                    <p class="card-text">Water-efficient solutions for optimal crop growth</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- About Preview Section -->
+<div class="container-fluid bg-green-gradient text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h2 class="display-5 mb-4">Our Mission</h2>
+                <p class="lead">We aim to revolutionize agriculture through cutting-edge technology, helping farmers increase productivity, reduce environmental impact, and improve sustainability.</p>
+                <a href="about.html" class="btn btn-light text-success mt-3">Learn More</a>
+            </div>
+            <div class="col-md-6">
+                <img src="/Assets/image.jpg" 
+                    class="img-fluid rounded shadow" alt="Agricultural Technology">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Product Preview Section -->
+<div class="container py-5">
+    <h2 class="text-center mb-5">Featured Products</h2>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="https://i0.wp.com/eepowerschool.com/wp-content/uploads/2018/09/Solar-Photovoltaic-panel.jpg?fit=1600%2C1062&ssl=1" 
+                    class="card-img-top" alt="Solar Power System">
+                <div class="card-body">
+                    <h5 class="card-title">Solar Power System</h5>
+                    <p class="card-text">Renewable energy solutions for farms</p>
+                    <a href="product.html" class="btn btn-success">View Details</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="/Assets/Smart-Agriculture-Monitoring-System.png" 
+                    class="card-img-top" alt="Farm Monitoring System">
+                <div class="card-body">
+                    <h5 class="card-title">Farm Monitoring System</h5>
+                    <p class="card-text">AI-powered crop health tracking</p>
+                    <a href="product.html" class="btn btn-success">View Details</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="https://www.niubol.com/static/upload/image/20240203/1706952557154980.jpg" 
+                    class="card-img-top" alt="Smart Irrigation">
+                <div class="card-body">
+                    <h5 class="card-title">Automated Irrigation</h5>
+                    <p class="card-text">Water-saving intelligent systems</p>
+                    <a href="product.html" class="btn btn-success">View Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none fw-bold">
+            <img src="https://img.icons8.com/ios-filled/50/228B22/leaf.png" alt="Logo" width="30" height="30" class="me-2">
+            SmartAgriFarm
+        </a>
+        <p class="mb-0">&copy; 2025 SmartAgriFarm. All rights reserved.</p>
+        <ul class="nav">
+            <li class="nav-item"><a href="#" class="nav-link text-white px-2">Privacy</a></li>
+            <li class="nav-item"><a href="#" class="nav-link text-white px-2">Terms</a></li>
+            <li class="nav-item"><a href="#" class="nav-link text-white px-2">Contact</a></li>
+        </ul>
+    </div>
+</footer>
+
+<!-- Chatbot Toggle Button -->
+<div class="chatbot-toggle" title="chatbot" id="chatbot-toggle">
+    <i class="fas fa-comments fa-lg" ></i>
+</div>
+
+<!-- Chatbot Container -->
+<div class="chatbot-container" id="chatbot-container">
+    <div class="chatbot-header">
+        <div class="chatbot-title">
+            <i class="fas fa-robot"></i>
+            <span>AgriBuddy Assistant</span>
+        </div>
+        <button class="chatbot-close" id="chatbot-close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    <div class="chatbot-messages" id="chatbot-messages">
+        <!-- Messages will be added here -->
+    </div>
+    <div class="chatbot-input-container">
+        <input type="text" class="chatbot-input" id="chatbot-input" placeholder="Ask about agriculture...">
+        <button class="chatbot-send" id="chatbot-send">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
+</div>
+
+<script>
+    // Loading spinner
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            document.querySelector('.spinner-border').style.display = 'none';
+        }, 1500);
+    });
+    
+    // Dark mode toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = themeToggleBtn.querySelector('i');
+        
+        // Check for saved theme preference or use user's system preference
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        // Set initial theme based on saved preference or system preference
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            document.documentElement.setAttribute('data-bs-theme', 'dark');
+            themeIcon.classList.replace('fa-sun', 'fa-moon');
+        } else {
+            document.documentElement.setAttribute('data-bs-theme', 'light');
+            themeIcon.classList.replace('fa-moon', 'fa-sun');
+        }
+        
+        // Toggle theme when button is clicked
+        themeToggleBtn.addEventListener('click', function() {
+            const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            // Update the theme
+            document.documentElement.setAttribute('data-bs-theme', newTheme);
+            
+            // Update the button icon
+            if (newTheme === 'dark') {
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+            } else {
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+            }
+            
+            // Save preference to localStorage
+            localStorage.setItem('theme', newTheme);
+        });
+        
+        // Chatbot functionality
+        const chatbotToggle = document.getElementById('chatbot-toggle');
+        const chatbotContainer = document.getElementById('chatbot-container');
+        const chatbotClose = document.getElementById('chatbot-close');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const chatbotInput = document.getElementById('chatbot-input');
+        const chatbotSend = document.getElementById('chatbot-send');
+        
+        // Toggle chatbot visibility
+        chatbotToggle.addEventListener('click', function() {
+            chatbotContainer.style.display = 'flex';
+            chatbotToggle.style.display = 'none';
+            
+            // If this is the first time opening, show welcome message
+            if (chatbotMessages.children.length === 0) {
+                showBotMessage("Hi there! I'm AgriBuddy, your agricultural assistant. How can I help you today?");
+                
+                // Add suggested questions
+                setTimeout(() => {
+                    const suggestedDiv = document.createElement('div');
+                    suggestedDiv.className = 'suggested-questions';
+                    
+                    const questions = [
+                        "Best crops for summer?",
+                        "How to improve soil fertility?",
+                        "Organic pest control methods?",
+                        "Water conservation techniques?"
+                    ];
+                    
+                    questions.forEach(q => {
+                        const chip = document.createElement('div');
+                        chip.className = 'question-chip';
+                        chip.textContent = q;
+                        chip.addEventListener('click', () => {
+                            chatbotInput.value = q;
+                            sendMessage();
+                        });
+                        suggestedDiv.appendChild(chip);
+                    });
+                    
+                    chatbotMessages.appendChild(suggestedDiv);
+                    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+                }, 1000);
+            }
+        });
+        
+        // Close chatbot
+        chatbotClose.addEventListener('click', function() {
+            chatbotContainer.style.display = 'none';
+            chatbotToggle.style.display = 'flex';
+        });
+        
+        // Send message on button click
+        chatbotSend.addEventListener('click', sendMessage);
+        
+        // Send message on Enter key
+        chatbotInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        function sendMessage() {
+            const message = chatbotInput.value.trim();
+            if (message !== '') {
+                // Add user message to chat
+                showUserMessage(message);
+                
+                // Clear input
+                chatbotInput.value = '';
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Process message and respond (with delay to simulate thinking)
+                setTimeout(() => {
+                    // Remove typing indicator
+                    const typingIndicator = document.querySelector('.typing-indicator');
+                    if (typingIndicator) {
+                        typingIndicator.remove();
+                    }
+                    
+                    // Get bot response
+                    const response = getBotResponse(message);
+                    showBotMessage(response);
+                }, 1500);
+            }
+        }
+        
+        function showUserMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user-message';
+            messageDiv.textContent = message;
+            
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'message-time';
+            timeDiv.textContent = getCurrentTime();
+            messageDiv.appendChild(timeDiv);
+            
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+        
+        function showBotMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot-message';
+            messageDiv.innerHTML = message; // Using innerHTML to support HTML in responses
+            
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'message-time';
+            timeDiv.textContent = getCurrentTime();
+            messageDiv.appendChild(timeDiv);
+            
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            const indicatorDiv = document.createElement('div');
+            indicatorDiv.className = 'typing-indicator';
+            
+            for (let i = 0; i < 3; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'typing-dot';
+                indicatorDiv.appendChild(dot);
+            }
+            
+            chatbotMessages.appendChild(indicatorDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+        
+        function getCurrentTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            return hours + ':' + minutes + ' ' + ampm;
+        }
+        
+        // Agricultural knowledge base
+        function getBotResponse(message) {
+            // Convert message to lowercase for easier matching
+            const lowerMessage = message.toLowerCase();
+            
+            // Check for keywords
+            if (lowerMessage.includes('hello') || lowerMessage.includes('hi') || lowerMessage.includes('hey')) {
+                return "Hello! How can I help with your agricultural questions today?";
+            }
+            else if (lowerMessage.includes('thank')) {
+                return "You're welcome! Feel free to ask if you have any other questions about farming or agriculture.";
+            }
+            else if (lowerMessage.includes('bye') || lowerMessage.includes('goodbye')) {
+                return "Goodbye! Have a great day and successful farming!";
+            }
+            
+            // Agriculture specific responses
+            else if (lowerMessage.includes('crop') && lowerMessage.includes('summer')) {
+                return "For summer crops, consider heat-tolerant options like:<br>• Tomatoes<br>• Peppers<br>• Eggplant<br>• Okra<br>• Corn<br>• Cucumbers<br>• Melons<br>These crops thrive in warm conditions but require adequate water and sometimes shade during extreme heat.";
+            }
+            else if (lowerMessage.includes('crop') && lowerMessage.includes('winter')) {
+                return "Great winter crops include:<br>• Kale<br>• Spinach<br>• Broccoli<br>• Cauliflower<br>• Carrots<br>• Cabbage<br>• Garlic<br>• Onions<br>These crops can withstand cooler temperatures and even light frost.";
+            }
+            else if (lowerMessage.includes('soil') && (lowerMessage.includes('fertility') || lowerMessage.includes('improve'))) {
+                return "To improve soil fertility:<br>1. Add organic matter through compost or well-rotted manure<br>2. Practice crop rotation<br>3. Grow cover crops/green manures<br>4. Use organic fertilizers<br>5. Maintain proper pH levels<br>6. Implement no-till or minimal tillage practices<br>7. Add beneficial microorganisms<br>8. Consider using biochar";
+            }
+            else if (lowerMessage.includes('pest') && (lowerMessage.includes('control') || lowerMessage.includes('organic'))) {
+                return "Organic pest control methods include:<br>• Companion planting (marigolds, basil, etc.)<br>• Beneficial insects (ladybugs, praying mantis)<br>• Neem oil spray<br>• Diatomaceous earth<br>• Insecticidal soaps<br>• Garlic and hot pepper sprays<br>• Row covers<br>• Crop rotation to break pest cycles<br>• Regular monitoring and hand-picking pests";
+            }
+            else if (lowerMessage.includes('water') && (lowerMessage.includes('conservation') || lowerMessage.includes('saving'))) {
+                return "Water conservation techniques for agriculture:<br>1. Drip irrigation systems<br>2. Rainwater harvesting<br>3. Mulching to reduce evaporation<br>4. Planting drought-resistant crops<br>5. Monitoring soil moisture with sensors<br>6. Irrigation scheduling based on plant needs<br>7. Cover cropping to improve soil water retention<br>8. Contour farming and terracing";
+            }
+            else if (lowerMessage.includes('fertilizer') || lowerMessage.includes('fertilize')) {
+                return "When choosing fertilizers:<br>• Organic options include compost, manure, bone meal, fish emulsion, and seaweed<br>• Consider NPK ratios based on your plants' needs<br>• Slow-release fertilizers provide nutrients over time<br>• Foliar sprays can help with micronutrients<br>• Always follow application rates to avoid burning plants or polluting waterways<br>• Consider soil tests to determine specific nutrient needs";
+            }
+            else if (lowerMessage.includes('sustainable') || lowerMessage.includes('sustainability')) {
+                return "Sustainable farming practices include:<br>• Regenerative agriculture<br>• Agroforestry<br>• Integrated crop-livestock systems<br>• Conservation tillage<br>• Precision agriculture<br>• Rotational grazing<br>• Diversified cropping systems<br>• Reduced synthetic inputs<br>• Water conservation<br>• Renewable energy integration";
+            }
+            else if (lowerMessage.includes('solar') || lowerMessage.includes('renewable energy')) {
+                return "Solar energy for farms:<br>• Powers irrigation systems<br>• Runs greenhouse climate controls<br>• Charges electric farm equipment<br>• Supports livestock facilities<br>• Reduces operational costs<br>• Provides energy independence<br>• May qualify for tax incentives<br>• Can sell excess power back to grid<br>Visit our Products section to learn about our solar solutions!";
+            }
+            else if (lowerMessage.includes('irrigation') || lowerMessage.includes('watering')) {
+                return "Smart irrigation systems:<br>• Use soil moisture sensors<br>• Apply water precisely where needed<br>• Connect to weather forecasts<br>• Allow remote control via smartphone<br>• Reduce water waste by up to 60%<br>• Save time and labor<br>• Can be powered by solar energy<br>• Integrate with farm monitoring systems<br>Check our Products section for our smart irrigation solutions!";
+            }
+            else if (lowerMessage.includes('monitoring') || lowerMessage.includes('sensors')) {
+                return "Farm monitoring technologies offer:<br>• Real-time soil condition monitoring<br>• Crop health assessment using imagery<br>• Weather station integration<br>• Pest and disease detection<br>• Livestock tracking and health monitoring<br>• Equipment performance tracking<br>• Yield prediction<br>• Mobile alerts and notifications<br>View our Farm Monitoring Systems in the Products section!";
+            }
+            else if (lowerMessage.includes('product') || lowerMessage.includes('buy') || lowerMessage.includes('purchase')) {
+                return "Our main product categories include:<br>• Solar Power Systems<br>• Farm Monitoring Technology<br>• Smart Irrigation Solutions<br>• Soil Sensors<br>• Weather Stations<br>• Integrated Farm Management Software<br>You can browse all products on our Products page. Would you like more information about any specific category?";
+            }
+            else if (lowerMessage.includes('price') || lowerMessage.includes('cost')) {
+                return "Our product pricing varies depending on farm size and specific needs. We offer flexible financing options and potential subsidies through agricultural programs. For detailed pricing, please contact our sales team through the Contact page or call us at (555) 123-4567.";
+            }
+            else if (lowerMessage.includes('contact') || lowerMessage.includes('support')) {
+                return "You can reach our support team through:<br>• Email: support@smartagrifarm.com<br>• Phone: (555) 123-4567<br>• Contact form on our website<br>• Live chat (Mon-Fri, 8am-6pm)<br>• Our physical location: 123 Farm Tech Way, Agritown, AG 12345";
+            }
+            else if (lowerMessage.includes('about') || lowerMessage.includes('company')) {
+                return "SmartAgriFarm was founded in 2020 by agricultural engineers and farmers with a mission to make sustainable farming technology accessible to farms of all sizes. We've helped over 500 farms increase yields while reducing resource usage through our innovative solutions. Learn more on our About page!";
+            }
+            // Additional agricultural questions and answers
+            else if (lowerMessage.includes('crop rotation')) {
+                return "Crop rotation benefits include:<br>• Breaking pest and disease cycles<br>• Improving soil structure<br>• Balancing nutrient usage<br>• Reducing weed pressure<br>• Increasing biodiversity<br>• Enhancing soil fertility<br>A simple rotation might involve legumes → leafy crops → root crops → fruiting crops.";
+            }
+            else if (lowerMessage.includes('hydroponics') || lowerMessage.includes('hydroponic')) {
+                return "Hydroponic farming advantages:<br>• Uses up to 90% less water than traditional farming<br>• No soil needed<br>• Higher yields in smaller spaces<br>• Year-round growing capability<br>• Fewer pest problems<br>• Precise nutrient control<br>• Faster growth rates<br>• Can be integrated with smart monitoring systems";
+            }
+            else if (lowerMessage.includes('greenhouse') || lowerMessage.includes('indoor farming')) {
+                return "Greenhouse and indoor farming benefits:<br>• Extended growing seasons<br>• Protection from extreme weather<br>• Controlled environment for optimized growth<br>• Reduced pest pressure<br>• Consistent yield quality<br>• Water conservation<br>• Integration with smart technologies for monitoring and automation";
+            }
+            else if (lowerMessage.includes('compost') || lowerMessage.includes('composting')) {
+                return "Composting tips for farms:<br>• Balance 'browns' (carbon-rich) and 'greens' (nitrogen-rich) materials<br>• Maintain proper moisture (like a wrung-out sponge)<br>• Turn regularly for aeration<br>• Consider different methods: windrow, static pile, or in-vessel<br>• Monitor temperature to ensure proper decomposition<br>• Screen finished compost before application<br>• Use compost tea as a nutrient-rich spray";
+            }
+            else if (lowerMessage.includes('drought') || lowerMessage.includes('dry')) {
+                return "Drought management strategies:<br>• Install efficient irrigation systems<br>• Select drought-tolerant crop varieties<br>• Use mulch to retain soil moisture<br>• Implement shade structures when possible<br>• Practice conservation tillage<br>• Monitor soil moisture with sensors<br>• Schedule irrigation during cooler hours<br>• Consider drought insurance programs";
+            }
+            else if (lowerMessage.includes('organic farming') || lowerMessage.includes('certified organic')) {
+                return "Organic farming practices:<br>• Avoid synthetic pesticides and fertilizers<br>• Use natural soil amendments<br>• Implement biological pest control<br>• Practice crop rotation and cover cropping<br>• Maintain buffer zones around fields<br>• Keep detailed records for certification<br>• Use approved organic inputs only<br>• Focus on soil health as foundation";
+            }
+            else if (lowerMessage.includes('vertical farming')) {
+                return "Vertical farming benefits:<br>• Maximizes space efficiency<br>• Year-round production<br>• Uses up to 95% less water<br>• Eliminates agricultural runoff<br>• Reduces transportation costs<br>• Can be located in urban areas<br>• Protected from weather extremes<br>• Precise environmental control<br>• Often integrates with IoT technologies";
+            }
+            else if (lowerMessage.includes('climate change') || lowerMessage.includes('global warming')) {
+                return "Agriculture and climate change adaptation:<br>• Implement water conservation measures<br>• Select resilient crop varieties<br>• Diversify crops and practices<br>• Use climate-smart technologies<br>• Practice carbon sequestration through reduced tillage<br>• Consider agroforestry systems<br>• Install renewable energy sources<br>• Monitor changing pest and disease patterns";
+            }
+            else if (lowerMessage.includes('weed') || lowerMessage.includes('weeds')) {
+                return "Sustainable weed management:<br>• Mulching to suppress weeds<br>• Cover cropping during off-seasons<br>• Crop rotation to disrupt weed cycles<br>• Mechanical cultivation at appropriate times<br>• Precision farming to target problem areas<br>• Flame weeding for organic operations<br>• Competitive planting to reduce weed space<br>• Careful timing of planting and harvest";
+            }
+            else if (lowerMessage.includes('harvest') || lowerMessage.includes('harvesting')) {
+                return "Harvest optimization tips:<br>• Monitor crop maturity indicators closely<br>• Harvest during optimal weather conditions<br>• Ensure proper equipment maintenance<br>• Train workers on quality standards<br>• Implement post-harvest handling protocols<br>• Use appropriate storage methods<br>• Consider staggered planting for continuous harvest<br>Check our Harvest Guide for crop-specific recommendations!";
+            }
+            else if (lowerMessage.includes('soil pH') || lowerMessage.includes('pH level')) {
+                return "Soil pH management:<br>• Optimal range for most crops is 6.0-7.0<br>• Test soil regularly (at least annually)<br>• Raise pH with lime or wood ash<br>• Lower pH with sulfur or organic matter<br>• Consider crop-specific pH requirements<br>• Address in zones for precision management<br>• Adjust gradually to avoid shocking plants<br>• Remember pH affects nutrient availability";
+            }
+            else if (lowerMessage.includes('livestock') || lowerMessage.includes('cattle') || lowerMessage.includes('animal')) {
+                return "Sustainable livestock farming:<br>• Implement rotational grazing<br>• Integrate with crop production<br>• Use smart monitoring for animal health<br>• Optimize feed efficiency<br>• Manage manure as a resource<br>• Consider silvopasture (trees + livestock)<br>• Provide appropriate shelter and ventilation<br>• Track performance with digital tools";
+            }
+            else if (lowerMessage.includes('pollinator') || lowerMessage.includes('bee') || lowerMessage.includes('butterfly')) {
+                return "Supporting pollinators on farms:<br>• Plant diverse flowering species<br>• Create pollinator habitat zones<br>• Reduce pesticide use<br>• Provide clean water sources<br>• Leave some areas unmowed<br>• Install bee houses or hives<br>• Plant hedgerows for habitat<br>• Consider timing applications to minimize impact<br>• Establish flowering cover crops";
+            }
+            else if (lowerMessage.includes('frost') || lowerMessage.includes('freeze') || lowerMessage.includes('cold')) {
+                return "Frost protection methods:<br>• Install frost cloth or row covers<br>• Use wind machines to circulate air<br>• Apply water at strategic times<br>• Plant on slopes for cold air drainage<br>• Use heaters in critical areas<br>• Monitor forecasts with weather stations<br>• Select appropriate planting dates<br>• Choose cold-hardy varieties";
+            }
+            else if (lowerMessage.includes('farm equipment') || lowerMessage.includes('machinery') || lowerMessage.includes('tractor')) {
+                return "Smart farm equipment solutions:<br>• GPS-guided precision machinery<br>• Variable rate application technology<br>• Autonomous tractors and implements<br>• Drone-based monitoring systems<br>• Equipment maintenance tracking<br>• Fuel efficiency optimization<br>• Electric and solar-powered options<br>• Remote diagnostic capabilities";
+            }
+            // Identify non-agricultural questions
+            else if (
+                (lowerMessage.includes('movie') || lowerMessage.includes('film') || lowerMessage.includes('tv') || lowerMessage.includes('show')) ||
+                (lowerMessage.includes('politics') || lowerMessage.includes('election') || lowerMessage.includes('president')) ||
+                (lowerMessage.includes('game') || lowerMessage.includes('sport') || lowerMessage.includes('play')) ||
+                (lowerMessage.includes('music') || lowerMessage.includes('song') || lowerMessage.includes('band')) ||
+                (lowerMessage.includes('computer') || lowerMessage.includes('phone') || lowerMessage.includes('tablet')) ||
+                (lowerMessage.includes('date') || lowerMessage.includes('restaurant')) ||
+                (lowerMessage.includes('stock') || lowerMessage.includes('invest') || lowerMessage.includes('bitcoin')) ||
+                (lowerMessage.includes('joke') || lowerMessage.includes('funny')) ||
+                (lowerMessage.includes('weather') && !lowerMessage.includes('crop') && !lowerMessage.includes('farm')) ||
+                (lowerMessage.includes('cook') || lowerMessage.includes('recipe'))
+            ) {
+                return "I'm an agricultural assistant and can only answer questions related to farming, crops, livestock, agricultural technology, and sustainable practices. Please ask me about agricultural topics, and I'll be happy to help!";
+            }
+            else {
+                // Check if the message contains any agriculture-related keywords
+                const agKeywords = ['farm', 'crop', 'plant', 'soil', 'water', 'seed', 'harvest', 'grow', 'agriculture', 
+                                   'organic', 'fertiliz', 'pest', 'irriga', 'weed', 'compost', 'garden', 'field', 
+                                   'vegetable', 'fruit', 'livestock', 'cattle', 'chicken', 'dairy', 'sustain', 
+                                   'yield', 'rotation', 'season', 'hydroponic', 'greenhouse', 'tractor', 'equipment'];
+                
+                const containsAgKeyword = agKeywords.some(keyword => lowerMessage.includes(keyword));
+                
+                if (containsAgKeyword) {
+                    return "That's an interesting agricultural question! While I don't have specific information on that exact topic, here are some related resources you might find helpful:<br>• Check our Products section for technology solutions<br>• Visit our Harvest Guide for seasonal recommendations<br>• Contact our agricultural experts for personalized advice<br>• Explore our blog for the latest farming tips and research";
+                } else {
+                    return "I specialize in agricultural topics and can help with questions about farming, crops, soil health, irrigation, livestock, sustainable practices, and agricultural technology. How can I assist you with your farming needs today?";
+                }
+            }
+        }
+    });
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

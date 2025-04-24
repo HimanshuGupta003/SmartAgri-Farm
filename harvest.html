@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harvest Calendar - SmartAgri Farm</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-green: #228B22;
+            --secondary-green: #2ecc71;
+            --light-green: #e9f7e9;
+            --dark-green: #1a5f1a;
+            --transition-speed: 0.3s;
+        }
+        body {
+            background-color: var(--light-green);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .navbar {
+            background-color: var(--primary-green);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all var(--transition-speed) ease;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            position: relative;
+        }
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #228B22;
+            transition: width 0.3s;
+        }
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        .header-section {
+            background: linear-gradient(rgba(34, 139, 34, 0.8), rgba(34, 139, 34, 0.8)), 
+                        url('/Assets/header.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 120px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.1);
+        }
+        .header-section h1 {
+            font-size: 3.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .seasonal-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: all var(--transition-speed) ease;
+            border-top: 5px solid var(--primary-green);
+        }
+        .seasonal-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        .crop-icon {
+            font-size: 4rem;
+            color: var(--primary-green);
+            margin-bottom: 20px;
+            transition: transform var(--transition-speed) ease;
+        }
+        .seasonal-card:hover .crop-icon {
+            transform: rotate(15deg);
+        }
+        .seasonal-month {
+            background-color: var(--secondary-green);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin: 5px;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+        .table-responsive {
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .harvest-card {
+            transition: all var(--transition-speed) ease;
+        }
+        .harvest-card:hover {
+            background-color: rgba(46, 204, 113, 0.05);
+        }
+        .seasonal-details {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 40px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .card-tips {
+            transition: all var(--transition-speed) ease;
+            border-left: 5px solid var(--primary-green);
+        }
+        .card-tips:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        footer {
+            background-color: var(--dark-green) !important;
+            padding: 30px 0;
+        }
+        @media (max-width: 768px) {
+            .header-section h1 {
+                font-size: 2.5rem;
+            }
+            .seasonal-details {
+                padding: 20px;
+            }
+        }
+
+        .feature-section {
+            background-color: white;
+            padding: 60px 0;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .expertise-card {
+            transition: all 0.3s ease;
+            border-bottom: 4px solid var(--primary-green);
+            margin-bottom: 20px;
+        }
+        .expertise-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+        }
+        .advanced-section {
+            background-color: var(--light-green);
+            padding: 60px 0;
+        }
+        .timeline-item {
+            border-left: 3px solid var(--primary-green);
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <img src="https://img.icons8.com/ios-filled/50/228B22/leaf.png" width="30" height="30" alt="logo">
+                SmartAgriFarm
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="product.html">Products</a></li>
+                    <li class="nav-item"><a class="nav-link" href="harvest.html">Harvest Guide</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                    <li class="nav-item ms-2">
+                        <a class="btn btn-outline-success" href="#">
+                            <i class="fas fa-shopping-cart"></i> Cart <span class="badge bg-success">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    
+    
+    <!-- Page Header -->
+    <div class="header-section text-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold text-white mb-3">Crop Planting & Harvest Guide</h1>
+            <p class="lead text-white mb-4">Optimize Your Farming Cycle with Precision Timing</p>
+        </div>
+    </div>
+    
+    <!-- Crop Seasonal Overview -->
+    <div class="container py-5" id="crop-overview">
+        <div class="row">
+            <div class="col-md-6 mb-6">
+                <div class="seasonal-card text-center h-100">
+                    <i class="fas fa-seedling crop-icon"></i>
+                    <h3 class="mb-3">Kharif Crops</h3>
+                    <p class="text-muted mb-3">Monsoon crops grown from June to October</p>
+                    <div>
+                        <span class="seasonal-month">June</span>
+                        <span class="seasonal-month">July</span>
+                        <span class="seasonal-month">August</span>
+                        <span class="seasonal-month">September</span>
+                        <span class="seasonal-month">October</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-6">
+                <div class="seasonal-card text-center h-100">
+                    <i class="fas fa-carrot crop-icon"></i>
+                    <h3 class="mb-3">Zaid Crops</h3>
+                    <p class="text-muted mb-3">Summer crops grown from March to June</p>
+                    <div>
+                        <span class="seasonal-month">March</span>
+                        <span class="seasonal-month">April</span>
+                        <span class="seasonal-month">May</span>
+                        <span class="seasonal-month">June</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Harvest Calendar Table -->
+    <div class="container py-5">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Crop</th>
+                        <th>Season</th>
+                        <th>Planting Season</th>
+                        <th>Harvesting Season</th>
+                        <th>Average Yield (Tons/Hectare)</th>
+                        <th>Water Requirement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="harvest-card">
+                        <td><strong>Wheat</strong></td>
+                        <td>Rabi</td>
+                        <td>November - December</td>
+                        <td>March - April</td>
+                        <td>3.5</td>
+                        <td>450-650 mm</td>
+                    </tr>
+                    <tr class="harvest-card">
+                        <td><strong>Rice</strong></td>
+                        <td>Kharif</td>
+                        <td>June - July</td>
+                        <td>October - November</td>
+                        <td>4.0</td>
+                        <td>1200-1500 mm</td>
+                    </tr>
+                    <tr class="harvest-card">
+                        <td><strong>Maize</strong></td>
+                        <td>Kharif</td>
+                        <td>April - May</td>
+                        <td>August - September</td>
+                        <td>2.8</td>
+                        <td>500-800 mm</td>
+                    </tr>
+                    <tr class="harvest-card">
+                        <td><strong>Sugarcane</strong></td>
+                        <td>Zaid</td>
+                        <td>September - October</td>
+                        <td>July - August</td>
+                        <td>70-80</td>
+                        <td>1500-2500 mm</td>
+                    </tr>
+                    <tr class="harvest-card">
+                        <td><strong>Vegetables</strong></td>
+                        <td>Mixed</td>
+                        <td>All Year Round</td>
+                        <td>Varies</td>
+                        <td>10-20</td>
+                        <td>400-600 mm</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Seasonal Tips Section -->
+    <div class="container seasonal-details">
+        <h2 class="text-center mb-5">Seasonal Farming Tips</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card card-tips border-0">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            <i class="fas fa-cloud-sun me-3 text-success"></i>
+                            Rabi Season Tips
+                        </h5>
+                        <p class="card-text text-muted">Focus on comprehensive soil preparation, strategic irrigation planning, and implementing robust frost protection techniques.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card card-tips border-0">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            <i class="fas fa-tint me-3 text-primary"></i>
+                            Kharif Season Tips
+                        </h5>
+                        <p class="card-text text-muted">Prioritize advanced drainage systems, integrated pest management, and selecting monsoon-resistant crop varieties.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card card-tips border-0">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            <i class="fas fa-sun me-3 text-warning"></i>
+                            Zaid Season Tips
+                        </h5>
+                        <p class="card-text text-muted">Implement advanced heat management strategies and choose scientifically developed heat-tolerant crop varieties.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container advanced-section">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="display-6">Advanced Crop Management Strategies</h2>
+                <p class="lead text-muted">Innovative approaches to sustainable and efficient farming</p>
+            </div>
+            <div class="col-md-4">
+                <div class="card expertise-card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-leaf text-success mb-3" style="font-size: 3rem;"></i>
+                        <h4>Precision Agriculture</h4>
+                        <p class="text-muted">Utilize GPS, sensors, and data analytics to optimize crop yields, reduce resource waste, and improve overall farm efficiency.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card expertise-card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-water text-primary mb-3" style="font-size: 3rem;"></i>
+                        <h4>Smart Irrigation</h4>
+                        <p class="text-muted">Implement advanced water management techniques including drip irrigation, moisture sensors, and AI-driven irrigation scheduling.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card expertise-card h-100">
+                    <div class="card-body">
+                        <i class="fas fa-globe-americas text-warning mb-3" style="font-size: 3rem;"></i>
+                        <h4>Sustainable Practices</h4>
+                        <p class="text-muted">Adopt eco-friendly farming methods, crop rotation, organic fertilization, and biodiversity conservation techniques.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Crop Lifecycle Timeline -->
+    <div class="container feature-section">
+        <div class="row">
+            <div class="col-12 text-center mb-5">
+                <h2 class="display-6">Comprehensive Crop Lifecycle Management</h2>
+                <p class="lead text-muted">From seed selection to harvest and post-harvest processing</p>
+            </div>
+            <div class="col-md-6">
+                <div class="timeline-item">
+                    <h4>Seed Selection & Preparation</h4>
+                    <p class="text-muted">Choose high-quality, disease-resistant seeds suited to your local climate and soil conditions. Perform seed treatment and priming.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>Land Preparation</h4>
+                    <p class="text-muted">Conduct soil testing, implement appropriate tillage methods, and ensure optimal nutrient balance before planting.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>Planting & Cultivation</h4>
+                    <p class="text-muted">Use precise planting techniques, manage row spacing, and implement integrated pest management strategies.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="timeline-item">
+                    <h4>Growth Monitoring</h4>
+                    <p class="text-muted">Regularly assess crop health using satellite imaging, drone surveys, and on-ground sensor networks.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>Harvest Optimization</h4>
+                    <p class="text-muted">Determine precise harvest times using moisture content analysis, crop maturity indicators, and weather forecasting.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>Post-Harvest Management</h4>
+                    <p class="text-muted">Implement proper storage, processing, and quality control techniques to maintain crop value and reduce post-harvest losses.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+<div class="container py-5">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h2 class="mb-0">Crop Management Calculator</h2>
+        </div>
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="calculatorTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="seed-tab" data-bs-toggle="tab" data-bs-target="#seed" type="button" role="tab">
+                        <i class="fas fa-seedling me-2"></i>Seed Calculator
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="fertilizer-tab" data-bs-toggle="tab" data-bs-target="#fertilizer" type="button" role="tab">
+                        <i class="fas fa-flask me-2"></i>Fertilizer Calculator
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="water-tab" data-bs-toggle="tab" data-bs-target="#water" type="button" role="tab">
+                        <i class="fas fa-tint me-2"></i>Water Requirement
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="profit-tab" data-bs-toggle="tab" data-bs-target="#profit" type="button" role="tab">
+                        <i class="fas fa-coins me-2"></i>Profit Estimator
+                    </button>
+                </li>
+            </ul>
+            
+            <div class="tab-content p-4" id="calculatorTabContent">
+                <!-- Seed Calculator Tab -->
+                <div class="tab-pane fade show active" id="seed" role="tabpanel">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form id="seedCalculatorForm">
+                                <div class="mb-3">
+                                    <label for="cropTypeSeed" class="form-label">Crop Type</label>
+                                    <select class="form-select" id="cropTypeSeed" required>
+                                        <option value="">Select a crop</option>
+                                        <option value="wheat">Wheat</option>
+                                        <option value="rice">Rice</option>
+                                        <option value="maize">Maize</option>
+                                        <option value="sugarcane">Sugarcane</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="landAreaSeed" class="form-label">Land Area (Hectares)</label>
+                                    <input type="number" class="form-control" id="landAreaSeed" min="0.1" step="0.1" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="seedSpacing" class="form-label">Row Spacing (cm)</label>
+                                    <input type="number" class="form-control" id="seedSpacing" min="5" required>
+                                </div>
+                                <button type="submit" class="btn btn-success">Calculate</button>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body bg-light rounded" id="seedResult">
+                                    <div class="text-center p-4">
+                                        <i class="fas fa-calculator text-muted" style="font-size: 3rem;"></i>
+                                        <p class="mt-3">Fill out the form to calculate seed requirements</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Fertilizer Calculator Tab -->
+                <div class="tab-pane fade" id="fertilizer" role="tabpanel">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form id="fertilizerCalculatorForm">
+                                <div class="mb-3">
+                                    <label for="cropTypeFert" class="form-label">Crop Type</label>
+                                    <select class="form-select" id="cropTypeFert" required>
+                                        <option value="">Select a crop</option>
+                                        <option value="wheat">Wheat</option>
+                                        <option value="rice">Rice</option>
+                                        <option value="maize">Maize</option>
+                                        <option value="sugarcane">Sugarcane</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="landAreaFert" class="form-label">Land Area (Hectares)</label>
+                                    <input type="number" class="form-control" id="landAreaFert" min="0.1" step="0.1" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="soilType" class="form-label">Soil Type</label>
+                                    <select class="form-select" id="soilType" required>
+                                        <option value="">Select soil type</option>
+                                        <option value="clay">Clay</option>
+                                        <option value="sandy">Sandy</option>
+                                        <option value="loamy">Loamy</option>
+                                        <option value="silt">Silt</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-success">Calculate</button>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body bg-light rounded" id="fertilizerResult">
+                                    <div class="text-center p-4">
+                                        <i class="fas fa-flask text-muted" style="font-size: 3rem;"></i>
+                                        <p class="mt-3">Fill out the form to calculate fertilizer requirements</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Water Requirement Tab -->
+                <div class="tab-pane fade" id="water" role="tabpanel">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form id="waterCalculatorForm">
+                                <div class="mb-3">
+                                    <label for="cropTypeWater" class="form-label">Crop Type</label>
+                                    <select class="form-select" id="cropTypeWater" required>
+                                        <option value="">Select a crop</option>
+                                        <option value="wheat">Wheat</option>
+                                        <option value="rice">Rice</option>
+                                        <option value="maize">Maize</option>
+                                        <option value="sugarcane">Sugarcane</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="landAreaWater" class="form-label">Land Area (Hectares)</label>
+                                    <input type="number" class="form-control" id="landAreaWater" min="0.1" step="0.1" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="season" class="form-label">Growing Season</label>
+                                    <select class="form-select" id="season" required>
+                                        <option value="">Select season</option>
+                                        <option value="rabi">Rabi (Winter)</option>
+                                        <option value="kharif">Kharif (Monsoon)</option>
+                                        <option value="zaid">Zaid (Summer)</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-success">Calculate</button>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body bg-light rounded" id="waterResult">
+                                    <div class="text-center p-4">
+                                        <i class="fas fa-tint text-muted" style="font-size: 3rem;"></i>
+                                        <p class="mt-3">Fill out the form to calculate water requirements</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Profit Estimator Tab -->
+                <div class="tab-pane fade" id="profit" role="tabpanel">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form id="profitCalculatorForm">
+                                <div class="mb-3">
+                                    <label for="cropTypeProfit" class="form-label">Crop Type</label>
+                                    <select class="form-select" id="cropTypeProfit" required>
+                                        <option value="">Select a crop</option>
+                                        <option value="wheat">Wheat</option>
+                                        <option value="rice">Rice</option>
+                                        <option value="maize">Maize</option>
+                                        <option value="sugarcane">Sugarcane</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="landAreaProfit" class="form-label">Land Area (Hectares)</label>
+                                    <input type="number" class="form-control" id="landAreaProfit" min="0.1" step="0.1" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="seedCost" class="form-label">Seed Cost (₹/Hectare)</label>
+                                    <input type="number" class="form-control" id="seedCost" min="1" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fertilizerCost" class="form-label">Fertilizer Cost (₹/Hectare)</label>
+                                    <input type="number" class="form-control" id="fertilizerCost" min="1" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="laborCost" class="form-label">Labor Cost (₹/Hectare)</label>
+                                    <input type="number" class="form-control" id="laborCost" min="1" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="marketPrice" class="form-label">Market Price (₹/kg)</label>
+                                    <input type="number" class="form-control" id="marketPrice" min="0.1" step="0.1" required>
+                                </div>
+                                <button type="submit" class="btn btn-success">Calculate</button>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body bg-light rounded" id="profitResult">
+                                    <div class="text-center p-4">
+                                        <i class="fas fa-coins text-muted" style="font-size: 3rem;"></i>
+                                        <p class="mt-3">Fill out the form to estimate profit</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Expert Advisory Section -->
+    <div class="container-fluid bg-light py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h2 class="display-6 mb-4">Expert Agricultural Advisory</h2>
+                    <p class="lead text-muted mb-4">Professional guidance tailored to your farming needs</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Personalized crop management consultations
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Soil health and fertility analysis
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Climate-adaptive farming strategies
+                        </li>
+                        <li class="mb-3">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            Technology integration support
+                        </li>
+                    </ul>
+                    <a href="#" class="btn btn-success btn-lg">Request Consultation</a>
+                </div>
+                <div class="col-md-6">
+                    <img src="/Assets/expert.jpg" alt="Agricultural Expert" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container d-flex flex-wrap justify-content-between align-items-center">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none fw-bold">
+                <img src="https://img.icons8.com/ios-filled/50/228B22/leaf.png" alt="Logo" width="30" height="30" class="me-2">
+                SmartAgriFarm
+            </a>
+            <p class="mb-0">&copy; 2025 SmartAgriFarm. All rights reserved.</p>
+            <ul class="nav">
+                <li class="nav-item"><a href="#" class="nav-link text-white px-2">Privacy</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white px-2">Terms</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white px-2">Contact</a></li>
+            </ul>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+    // Crop data for calculations
+    const cropData = {
+        wheat: {
+            seedRate: 100, // kg per hectare
+            fertilizerN: 120, // Nitrogen kg/ha
+            fertilizerP: 60,  // Phosphorus kg/ha  
+            fertilizerK: 40,  // Potassium kg/ha
+            waterRequirement: {
+                rabi: 450,    // mm of water
+                kharif: 500,
+                zaid: 550
+            },
+            yieldEstimate: 3.5 // tons per hectare
+        },
+        rice: {
+            seedRate: 50,
+            fertilizerN: 100,
+            fertilizerP: 50,
+            fertilizerK: 50,
+            waterRequirement: {
+                rabi: 1000,
+                kharif: 1200,
+                zaid: 1500
+            },
+            yieldEstimate: 4.0
+        },
+        maize: {
+            seedRate: 20,
+            fertilizerN: 120,
+            fertilizerP: 60,
+            fertilizerK: 40,
+            waterRequirement: {
+                rabi: 500,
+                kharif: 650,
+                zaid: 800
+            },
+            yieldEstimate: 2.8
+        },
+        sugarcane: {
+            seedRate: 6000, // pieces per hectare
+            fertilizerN: 150,
+            fertilizerP: 60,
+            fertilizerK: 60,
+            waterRequirement: {
+                rabi: 1500,
+                kharif: 2000,
+                zaid: 2500
+            },
+            yieldEstimate: 75.0
+        }
+    };
+    
+    // Soil type factors for fertilizer adjustments
+    const soilFactors = {
+        clay: { N: 0.9, P: 1.2, K: 0.8 },
+        sandy: { N: 1.2, P: 0.9, K: 1.1 },
+        loamy: { N: 1.0, P: 1.0, K: 1.0 },
+        silt: { N: 1.1, P: 1.1, K: 0.9 }
+    };
+    
+    // Seed Calculator Form
+    document.getElementById('seedCalculatorForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const cropType = document.getElementById('cropTypeSeed').value;
+        const landArea = parseFloat(document.getElementById('landAreaSeed').value);
+        const rowSpacing = parseFloat(document.getElementById('seedSpacing').value);
+        
+        if (!cropType || isNaN(landArea) || isNaN(rowSpacing)) {
+            return;
+        }
+        
+        // Adjust seed rate based on row spacing
+        const spacingFactor = 50 / rowSpacing; // Using 50cm as the baseline
+        const seedNeeded = cropData[cropType].seedRate * landArea * spacingFactor;
+        
+        const resultHTML = `
+            <h4 class="text-success mb-4">Seed Requirement Results</h4>
+            <div class="mb-3">
+                <strong>Crop:</strong> ${cropType.charAt(0).toUpperCase() + cropType.slice(1)}
+            </div>
+            <div class="mb-3">
+                <strong>Land Area:</strong> ${landArea} hectares
+            </div>
+            <div class="mb-3">
+                <strong>Row Spacing:</strong> ${rowSpacing} cm
+            </div>
+            <div class="alert alert-success">
+                <h5>Total Seed Required:</h5>
+                <p class="display-6 mb-0">${seedNeeded.toFixed(2)} kg</p>
+            </div>
+            <div class="text-muted mt-3">
+                <small>* Based on standard seeding rate for ${cropType} adjusted for your row spacing</small>
+            </div>
+        `;
+        
+        document.getElementById('seedResult').innerHTML = resultHTML;
+    });
+    
+    // Fertilizer Calculator Form
+    document.getElementById('fertilizerCalculatorForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const cropType = document.getElementById('cropTypeFert').value;
+        const landArea = parseFloat(document.getElementById('landAreaFert').value);
+        const soilType = document.getElementById('soilType').value;
+        
+        if (!cropType || isNaN(landArea) || !soilType) {
+            return;
+        }
+        
+        // Calculate fertilizer requirements with soil type adjustment
+        const nitrogenNeeded = cropData[cropType].fertilizerN * landArea * soilFactors[soilType].N;
+        const phosphorusNeeded = cropData[cropType].fertilizerP * landArea * soilFactors[soilType].P;
+        const potassiumNeeded = cropData[cropType].fertilizerK * landArea * soilFactors[soilType].K;
+        
+        // Common fertilizer calculations (simplified)
+        const ureaNeeded = nitrogenNeeded * 2.17; // 46% N in Urea
+        const dapNeeded = phosphorusNeeded * 5.56; // 18% P in DAP
+        const mopNeeded = potassiumNeeded * 1.67; // 60% K in MOP
+        
+        const resultHTML = `
+            <h4 class="text-success mb-4">Fertilizer Requirement Results</h4>
+            <div class="mb-3">
+                <strong>Crop:</strong> ${cropType.charAt(0).toUpperCase() + cropType.slice(1)}
+            </div>
+            <div class="mb-3">
+                <strong>Land Area:</strong> ${landArea} hectares
+            </div>
+            <div class="mb-3">
+                <strong>Soil Type:</strong> ${soilType.charAt(0).toUpperCase() + soilType.slice(1)}
+            </div>
+            <div class="alert alert-success">
+                <h5>Nutrient Requirements:</h5>
+                <div class="row">
+                    <div class="col-md-4">
+                        <p><strong>N:</strong> ${nitrogenNeeded.toFixed(2)} kg</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>P:</strong> ${phosphorusNeeded.toFixed(2)} kg</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>K:</strong> ${potassiumNeeded.toFixed(2)} kg</p>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-info mt-3">
+                <h5>Equivalent Fertilizer Products:</h5>
+                <div class="row">
+                    <div class="col-md-4">
+                        <p><strong>Urea:</strong> ${ureaNeeded.toFixed(2)} kg</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>DAP:</strong> ${dapNeeded.toFixed(2)} kg</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>MOP:</strong> ${mopNeeded.toFixed(2)} kg</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-muted mt-3">
+                <small>* Adjusted for ${soilType} soil conditions</small>
+            </div>
+        `;
+        
+        document.getElementById('fertilizerResult').innerHTML = resultHTML;
+    });
+    
+    // Water Requirement Calculator Form
+    document.getElementById('waterCalculatorForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const cropType = document.getElementById('cropTypeWater').value;
+        const landArea = parseFloat(document.getElementById('landAreaWater').value);
+        const season = document.getElementById('season').value;
+        
+        if (!cropType || isNaN(landArea) || !season) {
+            return;
+        }
+        
+        // Calculate water requirements
+        const waterPerHectare = cropData[cropType].waterRequirement[season]; // mm of water
+        const totalWaterNeeded = waterPerHectare * landArea; // cubic meters (1 mm over 1 hectare = 10 cubic meters)
+        const waterNeededCubicMeters = totalWaterNeeded * 10;
+        
+        // Estimate irrigation applications
+        const irrigationRounds = Math.ceil(waterPerHectare / 50); // Assuming 50mm per irrigation
+        
+        const resultHTML = `
+            <h4 class="text-success mb-4">Water Requirement Results</h4>
+            <div class="mb-3">
+                <strong>Crop:</strong> ${cropType.charAt(0).toUpperCase() + cropType.slice(1)}
+            </div>
+            <div class="mb-3">
+                <strong>Land Area:</strong> ${landArea} hectares
+            </div>
+            <div class="mb-3">
+                <strong>Growing Season:</strong> ${season.charAt(0).toUpperCase() + season.slice(1)}
+            </div>
+            <div class="alert alert-success">
+                <h5>Water Requirements:</h5>
+                <p class="display-6 mb-0">${waterNeededCubicMeters.toFixed(2)} m³</p>
+                <p class="mb-0">(${waterPerHectare} mm per hectare)</p>
+            </div>
+            <div class="alert alert-info mt-3">
+                <h5>Irrigation Planning:</h5>
+                <p><strong>Recommended Irrigation Rounds:</strong> ${irrigationRounds}</p>
+                <p><strong>Water per Round:</strong> ${(waterNeededCubicMeters / irrigationRounds).toFixed(2)} m³</p>
+            </div>
+            <div class="text-muted mt-3">
+                <small>* Based on average water requirements for ${cropType} during ${season} season</small>
+            </div>
+        `;
+        
+        document.getElementById('waterResult').innerHTML = resultHTML;
+    });
+    
+    // Profit Estimator Form
+    document.getElementById('profitCalculatorForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const cropType = document.getElementById('cropTypeProfit').value;
+        const landArea = parseFloat(document.getElementById('landAreaProfit').value);
+        const seedCost = parseFloat(document.getElementById('seedCost').value);
+        const fertilizerCost = parseFloat(document.getElementById('fertilizerCost').value);
+        const laborCost = parseFloat(document.getElementById('laborCost').value);
+        const marketPrice = parseFloat(document.getElementById('marketPrice').value);
+        
+        if (!cropType || isNaN(landArea) || isNaN(seedCost) || isNaN(fertilizerCost) ||
+            isNaN(laborCost) || isNaN(marketPrice)) {
+            return;
+        }
+        
+        // Calculate costs and revenue
+        const totalSeedCost = seedCost * landArea;
+        const totalFertilizerCost = fertilizerCost * landArea;
+        const totalLaborCost = laborCost * landArea;
+        const otherCosts = (totalSeedCost + totalFertilizerCost + totalLaborCost) * 0.15; // Estimated other costs
+        
+        const totalCost = totalSeedCost + totalFertilizerCost + totalLaborCost + otherCosts;
+        
+        // Calculate expected yield and revenue
+        const yieldTons = cropData[cropType].yieldEstimate * landArea;
+        const yieldKg = yieldTons * 1000;
+        const grossRevenue = yieldKg * marketPrice;
+        
+        // Calculate profit
+        const netProfit = grossRevenue - totalCost;
+        const returnOnInvestment = (netProfit / totalCost) * 100;
+        
+        const resultHTML = `
+            <h4 class="text-success mb-4">Profit Estimation Results</h4>
+            <div class="mb-3">
+                <strong>Crop:</strong> ${cropType.charAt(0).toUpperCase() + cropType.slice(1)}
+            </div>
+            <div class="mb-3">
+                <strong>Land Area:</strong> ${landArea} hectares
+            </div>
+            <div class="card mb-3">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Expected Yield</h5>
+                </div>
+                <div class="card-body">
+                    <p class="display-6 mb-0">${yieldTons.toFixed(2)} tons</p>
+                    <p>(${yieldKg.toFixed(2)} kg)</p>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Cost Breakdown</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <tr>
+                            <td>Seeds</td>
+                            <td class="text-end">₹${totalSeedCost.toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                            <td>Fertilizers</td>
+                            <td class="text-end">₹${totalFertilizerCost.toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                            <td>Labor</td>
+                            <td class="text-end">₹${totalLaborCost.toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                            <td>Other Costs</td>
+                            <td class="text-end">₹${otherCosts.toFixed(2)}</td>
+                        </tr>
+                        <tr class="table-light fw-bold">
+                            <td>Total Cost</td>
+                            <td class="text-end">₹${totalCost.toFixed(2)}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Revenue & Profit</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <tr>
+                            <td>Market Price</td>
+                            <td class="text-end">₹${marketPrice.toFixed(2)}/kg</td>
+                        </tr>
+                        <tr>
+                            <td>Gross Revenue</td>
+                            <td class="text-end">₹${grossRevenue.toFixed(2)}</td>
+                        </tr>
+                        <tr class="table-success fw-bold">
+                            <td>Net Profit</td>
+                            <td class="text-end">₹${netProfit.toFixed(2)}</td>
+                        </tr>
+                        <tr>
+                            <td>Return on Investment</td>
+                            <td class="text-end">${returnOnInvestment.toFixed(2)}%</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="text-muted mt-3">
+                <small>* Based on average yield estimates for ${cropType} and your provided costs</small>
+            </div>
+        `;
+        
+        document.getElementById('profitResult').innerHTML = resultHTML;
+    });
+});
+
+    </script>
+</body>
+</html>

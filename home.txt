@@ -1,0 +1,49 @@
+Develop a interactive and responsive website of 3 to 5 webpages using bootstrap for Agri Company Dealing with smart agri Farming applliances and Energy saving devices for agri use, by utilising of below mentioned elements (container class, Grid elements, Buttons, Font and Image Scaling, Gutter elements, Responsive navigation bar with dropdown menus for sections, show the utility of Bootstrap typography elements, Use Bootstrap utilities like margins padding, toggle visiblity etc to customise the webpage layout, Use pagination, Badges and level elements) 
+
+Instructions for submission of pdf in UMS:-
+Upload the  code  + Output file by 23rd feb
+write few points that why you choosing this theme and its importance
+Write your name, reg no., section on the top of the file
+Students individually represent code/output on 25th feb
+25 marks for Implementation
+25 marks for viva
+
+Topic:- Smart AgriFarm Devices for Selling 🚜🌱
+Your website can feature a range of smart agricultural devices designed to enhance farming efficiency, reduce costs, and promote sustainability. Below is a categorized list of Smart AgriFarm Devices you can showcase and sell:
+
+1️⃣ Smart Irrigation & Water Management Systems 💧
+🔹 AI-Powered Drip Irrigation Systems – Automatically adjust water levels based on soil moisture.
+🔹 Solar-Powered Water Pumps – Energy-efficient irrigation solutions for remote farms.
+🔹 IoT-Based Soil Moisture Sensors – Real-time monitoring of soil hydration levels.
+🔹 Smart Sprinkler Systems – Automated water distribution with weather-based adjustments.
+
+2️⃣ Smart Farming Equipment 🚜
+🔹 Autonomous Tractors & Robotic Weeders – AI-driven machines to reduce labor costs.
+🔹 Self-Driving Harvesters – Efficient harvesting with precision AI technology.
+🔹 Automated Seed Planters – Uniform and accurate seeding to maximize yield.
+🔹 Drones for Agriculture – Aerial crop monitoring, spraying, and mapping.
+
+3️⃣ Energy-Efficient Farming Solutions ⚡
+🔹 Solar-Powered Greenhouses – Sustainable farming with controlled climate conditions.
+🔹 LED Grow Lights – High-efficiency lighting for indoor and greenhouse farming.
+🔹 Smart Cooling & Ventilation Systems – Optimized airflow for crop storage and greenhouses.
+🔹 Biogas Generators – Convert farm waste into renewable energy.
+
+4️⃣ IoT & AI-Based Monitoring Systems 📊
+🔹 IoT-Enabled Weather Stations – Real-time climate tracking for better decision-making.
+🔹 AI-Powered Pest & Disease Detection Cameras – Identify crop diseases before they spread.
+🔹 Smart Farm Management Apps – Mobile-based monitoring and control of farm activities.
+🔹 Livestock Health Monitoring Sensors – Wearable tech for real-time animal health tracking.
+
+5️⃣ Smart Storage & Supply Chain Solutions 🏢
+🔹 Temperature-Controlled Storage Units – Reduce post-harvest losses.
+🔹 Automated Packaging & Sorting Machines – AI-driven crop sorting for better market pricing.
+🔹 Blockchain-Based Supply Chain Tracking – Transparency in farm-to-market logistics.
+
+Why Choose Our Smart AgriFarm Devices?
+✅ Increased Efficiency – Automation and AI reduce manual work.
+✅ Cost Savings – Lower labor, energy, and resource consumption.
+✅ Higher Yields – Precision farming techniques optimize crop production.
+✅ Eco-Friendly Solutions – Sustainable devices that conserve energy and water.
+
+These devices can be listed on your website with product descriptions, pricing, images, and a "Buy Now" or "Request Demo" button for customers

@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartAgriFarm - Agricultural Products</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+        body {
+            background-color: #e5f4e5;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .card:hover .card-img-top {
+            transform: scale(1.05);
+        }
+        .feature-icon {
+            font-size: 1.2rem;
+            margin-right: 8px;
+            color: #228B22;
+        }
+        .product-features {
+            padding: 0;
+            list-style: none;
+        }
+        .rating {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+        .btn-wishlist {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.8);
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s;
+        }
+        .btn-wishlist:hover {
+            background: rgba(255,255,255,1);
+            transform: scale(1.1);
+        }
+        .heart-icon {
+            color: #dc3545;
+            font-size: 18px;
+        }
+        .price-tag {
+            font-weight: bold;
+            color: #155724;
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+        .discount-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+        }
+        .filter-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .nav-link {
+            position: relative;
+        }
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #228B22;
+            transition: width 0.3s;
+        }
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        .buy-now-btn {
+            background-color: #228B22;
+            border: none;
+            transition: all 0.3s;
+        }
+        .buy-now-btn:hover {
+            background-color: #196619;
+            transform: translateY(-2px);
+        }
+        .stock-indicator {
+            font-size: 0.8rem;
+            margin-left: 8px;
+        }
+        .in-stock {
+            color: #28a745;
+        }
+        .low-stock {
+            color: #ffc107;
+        }
+        .out-stock {
+            color: #dc3545;
+        }
+        
+        /* Cart Animation Styles */
+        .cart-animation {
+            position: fixed;
+            background-color: #228B22;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            z-index: 9999;
+            animation: flyToCart 1s forwards;
+        }
+
+        .faq-header {
+            text-align: center;
+            color: var(--text-dark);
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background-color: var(--card-bg-light);
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle-wrapper {
+            display: flex;
+            align-items: center;
+        }
+        
+        #theme-toggle {
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+        
+        @keyframes flyToCart {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5) translateY(-400px) translateX(200px);
+                opacity: 0;
+            }
+        }
+        
+        .cart-badge {
+            animation: cartPulse 0.5s;
+        }
+        
+        @keyframes cartPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Cart Page Styles */
+        .cart-item-img {
+            height: 80px;
+            width: 80px;
+            object-fit: cover;
+        }
+        
+        .cart-item-details {
+            flex: 1;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+        }
+        
+        .quantity-btn {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+            cursor: pointer;
+        }
+        
+        .quantity-input {
+            width: 40px;
+            text-align: center;
+            border: 1px solid #ced4da;
+            height: 28px;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 50px 0;
+        }
+        
+        .empty-cart i {
+            font-size: 4rem;
+            color: #adb5bd;
+            margin-bottom: 20px;
+        }
+
+        #checkout-btn{
+            color: white;
+            text-decoration: none;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <img src="https://img.icons8.com/ios-filled/50/228B22/leaf.png" width="30" height="30" alt="logo">
+                SmartAgriFarm
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="product.html">Products</a></li>
+                    <li class="nav-item"><a class="nav-link" href="harvest.html">Harvest Guide</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                    <li class="nav-item ms-2">
+                        <a class="btn btn-outline-success" href="#" id="cartButton" onclick="showCartPage()">
+                            <i class="fas fa-shopping-cart"></i> Cart <span class="badge bg-success cart-count">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Products Page -->
+    <div class="container mt-4" id="productsPage">
+        <!-- Search and Filter Section -->
+        <div class="filter-section">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search products..." id="searchInput">
+                        <button class="btn btn-success" type="button"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            All Categories
+                        </button>
+                        <ul class="dropdown-menu w-100">
+                            <li><a class="dropdown-item" href="#">All Categories</a></li>
+                            <li><a class="dropdown-item" href="#">Energy Solutions</a></li>
+                            <li><a class="dropdown-item" href="#">Monitoring</a></li>
+                            <li><a class="dropdown-item" href="#">Irrigation</a></li>
+                            <li><a class="dropdown-item" href="#">Drones & Automation</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Featured
+                        </button>
+                        <ul class="dropdown-menu w-100">
+                            <li><a class="dropdown-item" href="#">Featured</a></li>
+                            <li><a class="dropdown-item" href="#">Price: Low to High</a></li>
+                            <li><a class="dropdown-item" href="#">Price: High to Low</a></li>
+                            <li><a class="dropdown-item" href="#">Best Rated</a></li>
+                            <li><a class="dropdown-item" href="#">Newest First</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <h1 class="text-center mb-4">Our Agricultural Products</h1>
+        <p class="text-center mb-4">Innovative solutions for modern farming <span class="badge bg-success animate-pulse">New 2025 Collection</span></p>
+        
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="productGrid">
+            <!-- Product 1 -->
+            <div class="col">
+                <div class="card h-100" data-product-id="1" data-product-name="Solar Power System" data-product-price="43499" data-product-img="https://i0.wp.com/eepowerschool.com/wp-content/uploads/2018/09/Solar-Photovoltaic-panel.jpg?fit=1600%2C1062&ssl=1">
+                    <span class="discount-badge badge bg-danger">20% OFF</span>
+                    <button class="btn-wishlist">
+                        <i class="far fa-heart heart-icon"></i>
+                    </button>
+                    <img src="https://i0.wp.com/eepowerschool.com/wp-content/uploads/2018/09/Solar-Photovoltaic-panel.jpg?fit=1600%2C1062&ssl=1" class="card-img-top" alt="Solar Power">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h5 class="card-title">Solar Power System <span class="badge bg-success">New</span></h5>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <small class="text-muted">(4.5/5)</small>
+                            </div>
+                        </div>
+                        <div class="price-tag">₹43,499 <small class="text-decoration-line-through text-muted">₹53,999</small>
+                            <span class="stock-indicator in-stock"><i class="fas fa-check-circle"></i> In Stock</span>
+                        </div>
+                        <p class="card-text">High-efficiency solar energy solution for sustainable farming operations.</p>
+                        
+                        <!-- Details Toggle Section -->
+                        <button class="btn btn-outline-primary w-100" data-bs-toggle="collapse" data-bs-target="#details1" aria-expanded="false">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+                        
+                        <div class="collapse mt-2" id="details1">
+                            <ul class="product-features">
+                                <li><i class="fas fa-check feature-icon"></i> 24/7 renewable power</li>
+                                <li><i class="fas fa-check feature-icon"></i> Battery storage included</li>
+                                <li><i class="fas fa-check feature-icon"></i> Easy installation</li>
+                            </ul>
+                        </div>
+        
+                        <button class="btn buy-now-btn text-white w-100 mt-2" onclick="addToCart(1)">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <small class="text-muted">Free installation & 5-year warranty</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 2 -->
+            <div class="col">
+                <div class="card h-100" data-product-id="2" data-product-name="Farm Monitoring System" data-product-price="10299" data-product-img="/Assets/Smart-Agriculture-Monitoring-System.png">
+                    <button class="btn-wishlist">
+                        <i class="far fa-heart heart-icon"></i>
+                    </button>
+                    <img src="/Assets/Smart-Agriculture-Monitoring-System.png" class="card-img-top" alt="Farm Monitoring System">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h5 class="card-title">Farm Monitoring System <span class="badge bg-warning text-dark">Popular</span></h5>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <small class="text-muted">(4.0/5)</small>
+                            </div>
+                        </div>
+                        <div class="price-tag">₹10,299
+                            <span class="stock-indicator in-stock"><i class="fas fa-check-circle"></i> In Stock</span>
+                        </div>
+                        <p class="card-text">AI-powered monitoring system for real-time crop health and farm management.</p>
+            
+                        <!-- Details Toggle Section -->
+                        <button class="btn btn-outline-primary w-100" data-bs-toggle="collapse" data-bs-target="#details2" aria-expanded="false">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+            
+                        <div class="collapse mt-2" id="details2">
+                            <ul class="product-features">
+                                <li><i class="fas fa-check feature-icon"></i> Mobile app included</li>
+                                <li><i class="fas fa-check feature-icon"></i> Weather integration</li>
+                                <li><i class="fas fa-check feature-icon"></i> Pest detection</li>
+                            </ul>
+                        </div>
+            
+                        <button class="btn buy-now-btn text-white w-100 mt-2" onclick="addToCart(2)">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <small class="text-muted">First year cloud storage free</small>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <!-- Product 3 -->
+            <div class="col">
+                <div class="card h-100" data-product-id="3" data-product-name="Soil Moisture Sensor" data-product-price="4599" data-product-img="https://assets.newatlas.com/dims4/default/b771fae/2147483647/strip/true/crop/1024x683+0+0/resize/1200x800!/quality/90/?url=http%3A%2F%2Fnewatlas-brightspot.s3.amazonaws.com%2Fd5%2F63%2F9d2efaaa49ef9afbc003716a24b1%2F63e484911ce0955620122692-1.jpeg">
+                    <button class="btn-wishlist">
+                        <i class="far fa-heart heart-icon"></i>
+                    </button>
+                    <img src="https://assets.newatlas.com/dims4/default/b771fae/2147483647/strip/true/crop/1024x683+0+0/resize/1200x800!/quality/90/?url=http%3A%2F%2Fnewatlas-brightspot.s3.amazonaws.com%2Fd5%2F63%2F9d2efaaa49ef9afbc003716a24b1%2F63e484911ce0955620122692-1.jpeg" class="card-img-top" alt="Soil Moisture Sensor">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h5 class="card-title">Soil Moisture Sensor <span class="badge bg-info text-dark">Smart Tech</span></h5>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <small class="text-muted">(4.9/5)</small>
+                            </div>
+                        </div>
+                        <div class="price-tag">₹4,599
+                            <span class="stock-indicator low-stock"><i class="fas fa-exclamation-circle"></i> Low Stock</span>
+                        </div>
+                        <p class="card-text">Advanced soil monitoring for precise irrigation and nutrient management.</p>
+            
+                        <!-- Details Toggle Section -->
+                        <button class="btn btn-outline-primary w-100" data-bs-toggle="collapse" data-bs-target="#details3" aria-expanded="false">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+            
+                        <div class="collapse mt-2" id="details3">
+                            <ul class="product-features">
+                                <li><i class="fas fa-check feature-icon"></i> Wireless connectivity</li>
+                                <li><i class="fas fa-check feature-icon"></i> Long battery life</li>
+                                <li><i class="fas fa-check feature-icon"></i> Multi-depth sensing</li>
+                            </ul>
+                        </div>
+            
+                        <button class="btn buy-now-btn text-white w-100 mt-2" onclick="addToCart(3)">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <small class="text-muted">Set of 5 sensors included</small>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <!-- Product 4: Agricultural Drone -->
+            <div class="col">
+                <div class="card h-100" data-product-id="4" data-product-name="Agricultural Drone Pro" data-product-price="13399" data-product-img="https://www.indowings.com/images/blog/agricultural-drones-blog.jpg">
+                    <span class="discount-badge badge bg-danger">15% OFF</span>
+                    <button class="btn-wishlist">
+                        <i class="far fa-heart heart-icon"></i>
+                    </button>
+                    <img src="https://www.indowings.com/images/blog/agricultural-drones-blog.jpg" class="card-img-top" alt="Agricultural Drone">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h5 class="card-title">Agricultural Drone Pro <span class="badge bg-success">New</span></h5>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <small class="text-muted">(4.2/5)</small>
+                            </div>
+                        </div>
+                        <div class="price-tag">₹13,399 <small class="text-decoration-line-through text-muted">₹15,999</small>
+                            <span class="stock-indicator in-stock"><i class="fas fa-check-circle"></i> In Stock</span>
+                        </div>
+                        <p class="card-text">Autonomous drone for crop monitoring, spraying, and precision agriculture.</p>
+            
+                        <!-- Details Toggle Section -->
+                        <button class="btn btn-outline-primary w-100" data-bs-toggle="collapse" data-bs-target="#details4" aria-expanded="false">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+            
+                        <div class="collapse mt-2" id="details4">
+                            <ul class="product-features">
+                                <li><i class="fas fa-check feature-icon"></i> 4K multispectral camera</li>
+                                <li><i class="fas fa-check feature-icon"></i> 30-min flight time</li>
+                                <li><i class="fas fa-check feature-icon"></i> Auto flight planning</li>
+                            </ul>
+                        </div>
+            
+                        <button class="btn buy-now-btn text-white w-100 mt-2" onclick="addToCart(4)">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <small class="text-muted">Includes training & certification</small>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <!-- Product 5: Weather Station -->
+            <div class="col">
+                <div class="card h-100" data-product-id="5" data-product-name="Smart Weather Station" data-product-price="1899" data-product-img="https://www.blitzwolfeurope.com/img/90562/RSH-Weather01-WiFi/RSH-Weather01-WiFi.jpg">
+                    <button class="btn-wishlist">
+                        <i class="far fa-heart heart-icon"></i>
+                    </button>
+                    <img src="https://www.blitzwolfeurope.com/img/90562/RSH-Weather01-WiFi/RSH-Weather01-WiFi.jpg" class="card-img-top" alt="Weather Station">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h5 class="card-title">Smart Weather Station <span class="badge bg-primary">Essential</span></h5>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <i class="far fa-star"></i>
+                                <small class="text-muted">(3.5/5)</small>
+                            </div>
+                        </div>
+                        <div class="price-tag">₹1,899
+                            <span class="stock-indicator in-stock"><i class="fas fa-check-circle"></i> In Stock</span>
+                        </div>
+                        <p class="card-text">Hyperlocal weather forecasting system customized for agricultural needs.</p>
+            
+                        <!-- Toggle Details -->
+                        <button class="btn btn-outline-primary w-100" data-bs-toggle="collapse" data-bs-target="#details5" aria-expanded="false">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+            
+                        <div class="collapse mt-2" id="details5">
+                            <ul class="product-features">
+                                <li><i class="fas fa-check feature-icon"></i> 7-day predictions</li>
+                                <li><i class="fas fa-check feature-icon"></i> Solar powered</li>
+                                <li><i class="fas fa-check feature-icon"></i> Frost alerts</li>
+                            </ul>
+                        </div>
+            
+                        <button class="btn buy-now-btn text-white w-100 mt-2" onclick="addToCart(5)">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <small class="text-muted">API available for integration</small>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <!-- Product 6: Smart Irrigation -->
+            <div class="col">
+                <div class="card h-100" data-product-id="6" data-product-name="Automated Irrigation" data-product-price="9699" data-product-img="https://www.niubol.com/static/upload/image/20240203/1706952557154980.jpg">
+                    <button class="btn-wishlist">
+                        <i class="far fa-heart heart-icon"></i>
+                    </button>
+                    <img src="https://www.niubol.com/static/upload/image/20240203/1706952557154980.jpg" class="card-img-top" alt="Smart Irrigation System">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h5 class="card-title">Automated Irrigation <span class="badge bg-warning text-dark">Water Saving</span></h5>
+                            <div class="rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <small class="text-muted">(4.7/5)</small>
+                            </div>
+                        </div>
+                        <div class="price-tag">₹9,699
+                            <span class="stock-indicator out-stock text-danger"><i class="fas fa-times-circle"></i> Back-order</span>
+                        </div>
+                        <p class="card-text">AI-powered irrigation management that reduces water usage by up to 40%.</p>
+            
+                        <!-- Toggleable Details -->
+                        <button class="btn btn-outline-primary w-100" data-bs-toggle="collapse" data-bs-target="#details6" aria-expanded="false">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+            
+                        <div class="collapse mt-2" id="details6">
+                            <ul class="product-features">
+                                <li><i class="fas fa-check feature-icon"></i> Zone control</li>
+                                <li><i class="fas fa-check feature-icon"></i> Smart scheduling</li>
+                                <li><i class="fas fa-check feature-icon"></i> Weather adaptive</li>
+                            </ul>
+                        </div>
+            
+                        <button class="btn btn-outline-danger w-100 mt-2" onclick="addToCart(6)">
+                            <i class="fas fa-shopping-cart"></i> Pre-order Now
+                        </button>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <small class="text-muted">Expected delivery: <strong>4-6 weeks</strong></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled"><a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a></li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Cart Page -->
+    <div class="container mt-4 d-none" id="cartPage">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1><i class="fas fa-shopping-cart text-success"></i> Your Shopping Cart</h1>
+                    <button class="btn btn-outline-secondary" onclick="showProductsPage()">
+                        <i class="fas fa-arrow-left"></i> Continue Shopping
+                    </button>
+                </div>
+                
+                <div id="emptyCart" class="empty-cart d-none">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h2>Your cart is empty</h2>
+                    <p>Explore our products and add items to your cart</p>
+                    <button class="btn btn-success mt-3" onclick="showProductsPage()">
+                        <i class="fas fa-shopping-basket"></i> Browse Products
+                    </button>
+                </div>
+                
+                <div id="cartItems" class="mb-4">
+                    <!-- Cart items will be added here dynamically -->
+                </div>
+                
+                <div id="cartSummary" class="card shadow-sm mb-4 d-none">
+                    <div class="card-body">
+                        <h4 class="mb-3">Order Summary</h4>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">₹0</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Shipping:</span>
+                            <span id="shipping">₹0</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Tax (GST 18%):</span>
+                            <span id="tax">₹0</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-2 fw-bold">
+                            <span>Total:</span>
+                            <span id="total" class="text-success">₹0</span>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <button class="btn btn-success w-100" >
+                                <i class="fas fa-lock me-2"></i> <a href="checkout.html" id="checkout-btn">Proceed to Checkout</a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- FAQ section -->
+<div class="container py-5" id="faq">
+    <div class="faq-section">
+        <h1 class="faq-header">Frequently Asked Questions</h1>
+        
+        <div class="accordion" id="smartAgriFAQ">
+            <!-- Devices and Technology -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#devicesTechnology">
+                        What types of smart agricultural devices do you offer?
+                    </button>
+                </h2>
+                <div id="devicesTechnology" class="accordion-collapse collapse" data-bs-parent="#smartAgriFAQ">
+                    <div class="accordion-body">
+                        We offer a comprehensive range of smart agricultural devices including:
+                        <ul>
+                            <li>Precision Irrigation Systems</li>
+                            <li>Soil Moisture and Nutrient Sensors</li>
+                            <li>Drone-based Crop Monitoring Devices</li>
+                            <li>Weather Tracking Stations</li>
+                            <li>Automated Pest Control Solutions</li>
+                            <li>Smart Greenhouse Management Systems</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shipping and Delivery -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#shippingDelivery">
+                        What are your shipping and delivery options?
+                    </button>
+                </h2>
+                <div id="shippingDelivery" class="accordion-collapse collapse" data-bs-parent="#smartAgriFAQ">
+                    <div class="accordion-body">
+                        <p>We offer nationwide shipping with the following options:</p>
+                        <ul>
+                            <li>Standard Shipping (5-7 business days)</li>
+                            <li>Express Shipping (2-3 business days)</li>
+                            <li>Free shipping on orders over $500</li>
+                            <li>International shipping available for select countries</li>
+                            <li>Tracked and insured shipping</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Installation and Support -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#installationSupport">
+                        Do you provide installation and technical support?
+                    </button>
+                </h2>
+                <div id="installationSupport" class="accordion-collapse collapse" data-bs-parent="#smartAgriFAQ">
+                    <div class="accordion-body">
+                        <p>We are committed to ensuring a smooth experience with our devices:</p>
+                        <ul>
+                            <li>Complimentary installation guide with each device</li>
+                            <li>24/7 technical support via phone and email</li>
+                            <li>Remote troubleshooting assistance</li>
+                            <li>Dedicated support team of agricultural technology experts</li>
+                            <li>Warranty coverage for all devices</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing and Warranty -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#pricingWarranty">
+                        What is your pricing and warranty policy?
+                    </button>
+                </h2>
+                <div id="pricingWarranty" class="accordion-collapse collapse" data-bs-parent="#smartAgriFAQ">
+                    <div class="accordion-body">
+                        <p>We offer competitive pricing and comprehensive warranty:</p>
+                        <ul>
+                            <li>Transparent pricing with no hidden fees</li>
+                            <li>2-year manufacturer warranty on all devices</li>
+                            <li>30-day money-back guarantee</li>
+                            <li>Flexible payment plans available</li>
+                            <li>Volume discounts for bulk purchases</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compatibility and Integration -->
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#compatibilityIntegration">
+                        Are your devices compatible with existing farm infrastructure?
+                    </button>
+                </h2>
+                <div id="compatibilityIntegration" class="accordion-collapse collapse" data-bs-parent="#smartAgriFAQ">
+                    <div class="accordion-body">
+                        <p>Our devices are designed for seamless integration:</p>
+                        <ul>
+                            <li>Compatible with most existing agricultural equipment</li>
+                            <li>Flexible connectivity options (WiFi, Cellular, LoRaWAN)</li>
+                            <li>Open API for custom integrations</li>
+                            <li>Cross-platform mobile and web applications</li>
+                            <li>Adaptive to various farm sizes and types</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Footer Section -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container d-flex flex-wrap justify-content-between align-items-center">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none fw-bold">
+                <img src="https://img.icons8.com/ios-filled/50/228B22/leaf.png" alt="Logo" width="30" height="30" class="me-2">
+                SmartAgriFarm
+            </a>
+            <p class="mb-0">&copy; 2025 SmartAgriFarm. All rights reserved.</p>
+            <ul class="nav">
+                <li class="nav-item"><a href="#" class="nav-link text-white px-2">Privacy</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white px-2">Terms</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white px-2">Contact</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    
+    
+    <!-- Toast Notification -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div id="cartToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="fas fa-check-circle me-2"></i> 
+                    <span id="toastMessage">Item added to cart</span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <script>
+        // Cart functionality
+        let cart = [];
+        let cartCount = 0;
+        
+        // Initialize cart from localStorage if available
+        function initCart() {
+            const savedCart = localStorage.getItem('smartAgriCart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+                updateCartCount();
+                updateCartBadge();
+            }
+        }
+        
+        // Run on page load
+        window.onload = function() {
+            initCart();
+        };
+        
+        // Add item to cart
+        function addToCart(productId) {
+            // Get product details from the card's data attributes
+            const productCard = document.querySelector(`.card[data-product-id="${productId}"]`);
+            if (!productCard) return;
+            
+            const productName = productCard.getAttribute('data-product-name');
+            const productPrice = parseFloat(productCard.getAttribute('data-product-price'));
+            const productImg = productCard.getAttribute('data-product-img');
+            
+            // Check if product already exists in cart
+            const existingProduct = cart.find(item => item.id === productId);
+            
+            if (existingProduct) {
+                // Increase quantity if already in cart
+                existingProduct.quantity += 1;
+                showToast(`Increased ${productName} quantity to ${existingProduct.quantity}`);
+            } else {
+                // Add new product to cart
+                cart.push({
+                    id: productId,
+                    name: productName,
+                    price: productPrice,
+                    img: productImg,
+                    quantity: 1
+                });
+                showToast(`${productName} added to your cart`);
+            }
+            
+            // Save to localStorage
+            saveCart();
+            
+            // Update cart count and badge
+            updateCartCount();
+            updateCartBadge();
+            
+            // Create animation
+            createCartAnimation(productCard);
+        }
+        
+        // Create flying animation to cart
+        function createCartAnimation(productCard) {
+            // Get position of the product card
+            const rect = productCard.getBoundingClientRect();
+            
+            // Create animation element
+            const animation = document.createElement('div');
+            animation.className = 'cart-animation';
+            animation.innerHTML = '<i class="fas fa-shopping-cart"></i>';
+            
+            // Position animation at product location
+            animation.style.top = `${rect.top + 20}px`;
+            animation.style.left = `${rect.left + 20}px`;
+            
+            // Add to body
+            document.body.appendChild(animation);
+            
+            // Remove after animation completes
+            setTimeout(() => {
+                animation.remove();
+            }, 1000);
+        }
+        
+        // Update cart count
+        function updateCartCount() {
+            cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            const cartCountElements = document.querySelectorAll('.cart-count');
+            cartCountElements.forEach(element => {
+                element.textContent = cartCount;
+            });
+        }
+        
+        // Update cart badge with animation
+        function updateCartBadge() {
+            const cartBadges = document.querySelectorAll('.cart-count');
+            cartBadges.forEach(badge => {
+                badge.classList.remove('cart-badge');
+                // Trigger reflow
+                void badge.offsetWidth;
+                badge.classList.add('cart-badge');
+            });
+        }
+        
+        // Save cart to localStorage
+        function saveCart() {
+            localStorage.setItem('smartAgriCart', JSON.stringify(cart));
+        }
+        
+        // Show toast notification
+        function showToast(message) {
+            const toastEl = document.getElementById('cartToast');
+            const toast = new bootstrap.Toast(toastEl);
+            document.getElementById('toastMessage').textContent = message;
+            toast.show();
+        }
+        
+        // Show cart page
+        function showCartPage() {
+            document.getElementById('productsPage').classList.add('d-none');
+            document.getElementById('cartPage').classList.remove('d-none');
+            renderCartItems();
+        }
+        
+        // Show products page
+        function showProductsPage() {
+            document.getElementById('cartPage').classList.add('d-none');
+            document.getElementById('productsPage').classList.remove('d-none');
+        }
+        
+        // Render cart items
+        function renderCartItems() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const emptyCart = document.getElementById('emptyCart');
+            const cartSummary = document.getElementById('cartSummary');
+            
+            // Clear previous content
+            cartItemsContainer.innerHTML = '';
+            
+            if (cart.length === 0) {
+                emptyCart.classList.remove('d-none');
+                cartSummary.classList.add('d-none');
+                return;
+            }
+            
+            emptyCart.classList.add('d-none');
+            cartSummary.classList.remove('d-none');
+            
+            // Add each item to the cart
+            cart.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.className = 'card mb-3 shadow-sm';
+                cartItem.innerHTML = `
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <img src="${item.img}" alt="${item.name}" class="cart-item-img rounded me-3">
+                            <div class="cart-item-details">
+                                <h5 class="mb-0">${item.name}</h5>
+                                <p class="text-success mb-0">₹${item.price.toLocaleString()}</p>
+                            </div>
+                            <div class="quantity-control me-3">
+                                <span class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</span>
+                                <input type="text" class="quantity-input" value="${item.quantity}" readonly>
+                                <span class="quantity-btn" onclick="increaseQuantity(${item.id})">+</span>
+                            </div>
+                            <div class="ms-3">
+                                <div class="fw-bold mb-2">₹${(item.price * item.quantity).toLocaleString()}</div>
+                                <button class="btn btn-sm btn-outline-danger" onclick="removeFromCart(${item.id})">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(cartItem);
+            });
+            
+            // Update summary
+            updateOrderSummary();
+        }
+        
+        // Update order summary
+        function updateOrderSummary() {
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const shipping = subtotal > 0 ? (subtotal >= 50000 ? 0 : 1000) : 0;
+            const tax = subtotal * 0.18;
+            const total = subtotal + shipping + tax;
+            
+            document.getElementById('subtotal').textContent = `₹${subtotal.toLocaleString()}`;
+            document.getElementById('shipping').textContent = shipping === 0 ? 'Free' : `₹${shipping.toLocaleString()}`;
+            document.getElementById('tax').textContent = `₹${tax.toLocaleString()}`;
+            document.getElementById('total').textContent = `₹${total.toLocaleString()}`;
+        }
+        
+        // Increase quantity
+        function increaseQuantity(productId) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += 1;
+                saveCart();
+                updateCartCount();
+                renderCartItems();
+            }
+        }
+        
+        // Decrease quantity
+        function decreaseQuantity(productId) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity -= 1;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    saveCart();
+                    updateCartCount();
+                    renderCartItems();
+                }
+            }
+        }
+        
+        // Remove from cart
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            saveCart();
+            updateCartCount();
+            renderCartItems();
+            showToast('Item removed from cart');
+        }
+        
+        // Checkout function
+        function checkout() {
+            alert('Thank you for your purchase! Your order has been placed.');
+            cart = [];
+            saveCart();
+            updateCartCount();
+            renderCartItems();
+        }
+        
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            const searchText = this.value.toLowerCase();
+            const products = document.querySelectorAll('#productGrid .card');
+            
+            products.forEach(product => {
+                const title = product.querySelector('.card-title').textContent.toLowerCase();
+                const description = product.querySelector('.card-text').textContent.toLowerCase();
+                const isVisible = title.includes(searchText) || description.includes(searchText);
+                
+                product.closest('.col').style.display = isVisible ? '' : 'none';
+            });
+        });
+
+        // Function to filter products based on search input
+function filterProducts() {
+    // Get the search input value and convert to lowercase for case-insensitive matching
+    const searchText = document.getElementById('searchInput').value.toLowerCase();
+    
+    // Get all product cards in the grid
+    const productCards = document.querySelectorAll('#productGrid .card');
+    
+    // Counter for visible products
+    let visibleProducts = 0;
+    
+    // Loop through each product card
+    productCards.forEach(card => {
+        // Get product name from data attribute
+        const productName = card.getAttribute('data-product-name').toLowerCase();
+        
+        // Get product description from the card text
+        const productDescription = card.querySelector('.card-text').textContent.toLowerCase();
+        
+        // Check if the search text is found in the product name or description
+        const isMatch = productName.includes(searchText) || productDescription.includes(searchText);
+        
+        // Get the parent column element
+        const parentCol = card.closest('.col');
+        
+        // Show or hide the column based on the search match
+        if (isMatch) {
+            parentCol.style.display = '';
+            visibleProducts++;
+        } else {
+            parentCol.style.display = 'none';
+        }
+    });
+    
+    // Display a message if no products found
+    const noResultsMsg = document.getElementById('noResultsMessage');
+    
+    if (visibleProducts === 0) {
+        // Create a message if it doesn't exist
+        if (!noResultsMsg) {
+            const message = document.createElement('div');
+            message.id = 'noResultsMessage';
+            message.className = 'col-12 text-center my-5';
+            message.innerHTML = `
+                <div class="alert alert-info">
+                    <i class="fas fa-search me-2"></i>
+                    No products found matching "<strong>${searchText}</strong>"
+                    <button class="btn btn-sm btn-outline-secondary ms-3" onclick="clearSearch()">
+                        Clear Search
+                    </button>
+                </div>
+            `;
+            document.getElementById('productGrid').appendChild(message);
+        } else {
+            // Update the existing message with current search term
+            noResultsMsg.querySelector('strong').textContent = searchText;
+            noResultsMsg.style.display = 'block';
+        }
+    } else if (noResultsMsg) {
+        // Hide the message if products are found
+        noResultsMsg.style.display = 'none';
+    }
+}
+
+// Function to clear the search
+function clearSearch() {
+    // Clear the search input
+    document.getElementById('searchInput').value = '';
+    
+    // Show all products
+    const productCards = document.querySelectorAll('#productGrid .col');
+    productCards.forEach(col => {
+        col.style.display = '';
+    });
+    
+    // Hide the no results message if it exists
+    const noResultsMsg = document.getElementById('noResultsMessage');
+    if (noResultsMsg) {
+        noResultsMsg.style.display = 'none';
+    }
+}
+
+// Add event listeners when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Add input event listener to search input for real-time filtering
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', filterProducts);
+        
+        // Add keypress event listener to handle Enter key
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                filterProducts();
+            }
+        });
+    }
+    
+    // Add click event listener to search button
+    const searchButton = document.querySelector('.input-group .btn-success');
+    if (searchButton) {
+        searchButton.addEventListener('click', filterProducts);
+    }
+});
+
+    </script>
+</body>
+</html>

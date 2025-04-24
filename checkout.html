@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartAgriFarm - Checkout</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+        body {
+            background-color: #e5f4e5;
+        }
+        .checkout-section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        .section-header {
+            border-bottom: 1px solid #e9ecef;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+        .section-number {
+            background-color: #228B22;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        .payment-method {
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .payment-method:hover {
+            border-color: #228B22;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .payment-method.selected {
+            border: 2px solid #228B22;
+            background-color: #f0f9f0;
+        }
+        .payment-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+            color: #6c757d;
+        }
+        .selected .payment-icon {
+            color: #228B22;
+        }
+        .order-summary-card {
+            position: sticky;
+            top: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 20px;
+        }
+        .checkout-btn {
+            background-color: #228B22;
+            border: none;
+            transition: all 0.3s;
+        }
+        .checkout-btn:hover {
+            background-color: #196619;
+            transform: translateY(-2px);
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #228B22;
+            transition: width 0.3s;
+        }
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        .form-check-input:checked {
+            background-color: #228B22;
+            border-color: #228B22;
+        }
+        .card-input {
+            background-position: 98% center;
+            background-repeat: no-repeat;
+            background-size: 25px;
+        }
+        .visa {
+            background-image: url('https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@main/visa.svg');
+        }
+        .mastercard {
+            background-image: url('https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@main/mastercard.svg');
+        }
+        .rupay {
+            background-image: url('https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@main/rupay.svg');
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <img src="https://img.icons8.com/ios-filled/50/228B22/leaf.png" width="30" height="30" alt="logo">
+                SmartAgriFarm
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="product.html">Products</a></li>
+                    <li class="nav-item"><a class="nav-link" href="harvest.html">Harvest Guide</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                    <li class="nav-item ms-2">
+                        <a class="btn btn-outline-success" href="product.html#cartSection">
+                            <i class="fas fa-shopping-cart"></i> Cart <span class="badge bg-success cart-count">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Checkout Progress -->
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between mb-4">
+            <h1 class="mb-0">Checkout</h1>
+            <a href="product.html" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Cart
+            </a>
+        </div>
+
+        <div class="progress mb-4" style="height: 5px;">
+            <div class="progress-bar bg-success" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        
+        <div class="row mb-2">
+            <div class="col-4 text-center">
+                <div class="text-success fw-bold"><i class="fas fa-shopping-cart"></i> Cart</div>
+            </div>
+            <div class="col-4 text-center">
+                <div class="text-success fw-bold"><i class="fas fa-address-card"></i> Information</div>
+            </div>
+            <div class="col-4 text-center">
+                <div class="text-muted"><i class="fas fa-check-circle"></i> Confirmation</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4 mb-5">
+        <div class="row">
+            <!-- Left Column - Form Sections -->
+            <div class="col-lg-8">
+                <!-- Contact Information Section -->
+                <div class="checkout-section">
+                    <div class="section-header">
+                        <h3><span class="section-number">1</span> Contact Information</h3>
+                    </div>
+                    <form id="contactForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="firstName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="lastName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" id="phone" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Shipping Address Section -->
+                <div class="checkout-section">
+                    <div class="section-header">
+                        <h3><span class="section-number">2</span> Shipping Address</h3>
+                    </div>
+                    <form id="shippingForm">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="address" class="form-label">Address Line 1 <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="address" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="address2" class="form-label">Address Line 2</label>
+                                <input type="text" class="form-control" id="address2">
+                            </div>
+                            <div class="col-md-5">
+                                <label for="country" class="form-label">Country <span class="text-danger">*</span></label>
+                                <select class="form-select" id="country" required>
+                                    <option value="">Choose...</option>
+                                    <option selected>India</option>
+                                    <option>Nepal</option>
+                                    <option>Bangladesh</option>
+                                    <option>Sri Lanka</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="state" class="form-label">State <span class="text-danger">*</span></label>
+                                <select class="form-select" id="state" required>
+                                    <option value="">Choose...</option>
+                                    <option>Andhra Pradesh</option>
+                                    <option>Gujarat</option>
+                                    <option>Karnataka</option>
+                                    <option>Maharashtra</option>
+                                    <option>Punjab</option>
+                                    <option>Tamil Nadu</option>
+                                    <option>Uttar Pradesh</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="pincode" class="form-label">PIN Code <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="pincode" required>
+                            </div>
+                        </div>
+                        <div class="form-check mt-3">
+                            <input class="form-check-input" type="checkbox" id="sameAsBilling">
+                            <label class="form-check-label" for="sameAsBilling">
+                                Billing address same as shipping
+                            </label>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Payment Method Section -->
+                <div class="checkout-section">
+                    <div class="section-header">
+                        <h3><span class="section-number">3</span> Payment Method</h3>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="payment-method" onclick="selectPayment('creditCard')">
+                                <div class="d-flex align-items-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" checked>
+                                    </div>
+                                    <i class="fab fa-cc-visa payment-icon"></i>
+                                    <div>
+                                        <label class="form-check-label fw-bold" for="creditCard">
+                                            Credit/Debit Card
+                                        </label>
+                                        <div class="small text-muted">Safe money transfer using your bank account</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="payment-method" onclick="selectPayment('upi')">
+                                <div class="d-flex align-items-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="paymentMethod" id="upi">
+                                    </div>
+                                    <i class="fas fa-mobile-alt payment-icon"></i>
+                                    <div>
+                                        <label class="form-check-label fw-bold" for="upi">
+                                            UPI Payment
+                                        </label>
+                                        <div class="small text-muted">Pay via UPI: Google Pay, PhonePe, Paytm</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="payment-method" onclick="selectPayment('netBanking')">
+                                <div class="d-flex align-items-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="paymentMethod" id="netBanking">
+                                    </div>
+                                    <i class="fas fa-university payment-icon"></i>
+                                    <div>
+                                        <label class="form-check-label fw-bold" for="netBanking">
+                                            Net Banking
+                                        </label>
+                                        <div class="small text-muted">All Indian banks are supported</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="payment-method" onclick="selectPayment('cod')">
+                                <div class="d-flex align-items-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="paymentMethod" id="cod">
+                                    </div>
+                                    <i class="fas fa-money-bill-wave payment-icon"></i>
+                                    <div>
+                                        <label class="form-check-label fw-bold" for="cod">
+                                            Cash On Delivery
+                                        </label>
+                                        <div class="small text-muted">Pay when you receive the products</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Credit Card Form -->
+                    <div id="creditCardForm" class="payment-details">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="cardName" class="form-label">Name on Card <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="cardName" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="cardNumber" class="form-label">Card Number <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control card-input" id="cardNumber" placeholder="XXXX XXXX XXXX XXXX" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="expiryMonth" class="form-label">Expiry Month <span class="text-danger">*</span></label>
+                                <select class="form-select" id="expiryMonth" required>
+                                    <option value="">MM</option>
+                                    <option>01</option>
+                                    <option>02</option>
+                                    <option>03</option>
+                                    <option>04</option>
+                                    <option>05</option>
+                                    <option>06</option>
+                                    <option>07</option>
+                                    <option>08</option>
+                                    <option>09</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="expiryYear" class="form-label">Expiry Year <span class="text-danger">*</span></label>
+                                <select class="form-select" id="expiryYear" required>
+                                    <option value="">YYYY</option>
+                                    <option>2025</option>
+                                    <option>2026</option>
+                                    <option>2027</option>
+                                    <option>2028</option>
+                                    <option>2029</option>
+                                    <option>2030</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="cvv" class="form-label">CVV <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="cvv" placeholder="XXX" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- UPI Form -->
+                    <div id="upiForm" class="payment-details d-none">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="upiId" class="form-label">UPI ID <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="upiId" placeholder="example@ybl" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Select UPI App</label>
+                                <div class="d-flex gap-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="upiApp" id="gpay" checked>
+                                        <label class="form-check-label" for="gpay">
+                                            Google Pay
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="upiApp" id="phonepe">
+                                        <label class="form-check-label" for="phonepe">
+                                            PhonePe
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="upiApp" id="paytm">
+                                        <label class="form-check-label" for="paytm">
+                                            Paytm
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Net Banking Form -->
+                    <div id="netBankingForm" class="payment-details d-none">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="bankName" class="form-label">Select Bank <span class="text-danger">*</span></label>
+                                <select class="form-select" id="bankName" required>
+                                    <option value="">Choose your bank</option>
+                                    <option>State Bank of India</option>
+                                    <option>HDFC Bank</option>
+                                    <option>ICICI Bank</option>
+                                    <option>Axis Bank</option>
+                                    <option>Punjab National Bank</option>
+                                    <option>Bank of Baroda</option>
+                                    <option>Kotak Mahindra Bank</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COD Form -->
+                    <div id="codForm" class="payment-details d-none">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> Please keep exact change ready at the time of delivery. Our delivery personnel may not carry change for large denominations.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Order Summary -->
+            <div class="col-lg-4">
+                <div class="order-summary-card">
+                    <h4 class="mb-3">Order Summary</h4>
+                    <div id="orderItems">
+                        <!-- Order items will be populated by JavaScript -->
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span id="summarySubtotal">₹0</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Shipping:</span>
+                        <span id="summaryShipping">₹0</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Tax (GST 18%):</span>
+                        <span id="summaryTax">₹0</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3 fw-bold">
+                        <span>Total:</span>
+                        <span id="summaryTotal" class="text-success">₹0</span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Coupon Code">
+                            <button class="btn btn-outline-success" type="button">Apply</button>
+                        </div>
+                    </div>
+                    
+                    <button id="placeOrderBtn" class="btn checkout-btn text-white w-100">
+                        <i class="fas fa-lock me-2"></i> Place Order
+                    </button>
+                    <div class="text-center mt-3">
+                        <small class="text-muted">By placing your order, you agree to our <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></small>
+                    </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        <img src="https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@main/visa.svg" alt="Visa" height="25" class="mx-1">
+                        <img src="https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@main/mastercard.svg" alt="Mastercard" height="25" class="mx-1">
+                        <img src="https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@main/rupay.svg" alt="Rupay" height="25" class="mx-1">
+                        <img src="https://cdn.jsdelivr.net/gh/aaronfagan/svg-credit-card-payment-icons@main/american-express.svg" alt="American Express" height="25" class="mx-1">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Success Modal -->
+    <div class="modal fade" id="orderSuccessModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body text-center py-4">
+                    <div class="mb-3">
+                        <i class="fas fa-check-circle text-success" style="font-size: 60px;"></i>
+                    </div>
+                    <h3>Order Placed Successfully!</h3>
+                    <p>Your order has been placed and is being processed. Your order ID is <strong>#SA<span id="orderNumber">98765</span></strong></p>
+                    <p>A confirmation email has been sent to <span id="confirmationEmail">your email address</span></p>
+                    <div class="d-flex justify-content-center gap-2 mt-4">
+                        <a href="home.html" class="btn btn-outline-secondary">
+                            <i class="fas fa-home"></i> Go Home
+                        </a>
+                        <a href="orders.html" class="btn btn-success">
+                            <i class="fas fa-box"></i> Track Order
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container d-flex flex-wrap justify-content-between align-items-center">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none fw-bold">
+                <img src="https://img.icons8.com/ios-filled/50/228B22/leaf.png" alt="Logo" width="30" height="30" class="me-2">
+                SmartAgriFarm
+            </a>
+            <p class="mb-0">&copy; 2025 SmartAgriFarm. All rights reserved.</p>
+            <ul class="nav">
+                <li class="nav-item"><a href="#" class="nav-link text-white px-2">Privacy</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white px-2">Terms</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white px-2">Contact</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+    <script>
+       // Cart data from localStorage
+let cart = [];
+let cartCount = 0;
+
+// Initialize cart from localStorage
+function initCart() {
+    const savedCart = localStorage.getItem('smartAgriCart');
+    if (savedCart) {
+        cart = JSON.parse(savedCart);
+        updateCartCount();
+        renderOrderSummary();
+    } else {
+        // Redirect to products page if cart is empty
+        window.location.href = 'product.html';
+    }
+}
+
+// Run on page load
+window.onload = function() {
+    initCart();
+    
+    // Set random order number
+    document.getElementById('orderNumber').textContent = Math.floor(10000 + Math.random() * 90000);
+    
+    // Initialize payment methods
+    document.querySelectorAll('.payment-method').forEach(method => {
+        method.addEventListener('click', function() {
+            const radioInput = this.querySelector('input[type="radio"]');
+            if (radioInput) {
+                radioInput.checked = true;
+                selectPayment(radioInput.id);
+            }
+        });
+    });
+    
+    // Handle place order button
+    document.getElementById('placeOrderBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Basic form validation
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const address = document.getElementById('address').value;
+        
+        if (!firstName || !lastName || !email || !phone || !address) {
+            alert('Please fill in all required fields');
+            return;
+        }
+        
+        // Set confirmation email in success modal
+        document.getElementById('confirmationEmail').textContent = email;
+        
+        // Show success modal
+        const successModal = new bootstrap.Modal(document.getElementById('orderSuccessModal'));
+        successModal.show();
+        
+        // Clear cart
+        localStorage.removeItem('smartAgriCart');
+    });
+
+    // Handle card number input formatting and card type detection
+    const cardNumberInput = document.getElementById('cardNumber');
+    if (cardNumberInput) {
+        cardNumberInput.addEventListener('input', function(e) {
+            // Format card number with spaces
+            let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+            let formattedValue = '';
+            
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += ' ';
+                }
+                formattedValue += value[i];
+            }
+            
+            e.target.value = formattedValue;
+            
+            // Detect card type
+            detectCardType(value);
+        });
+    }
+    
+    // Initialize CVV input to allow only numbers and max 3-4 digits
+    const cvvInput = document.getElementById('cvv');
+    if (cvvInput) {
+        cvvInput.addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/\D/g, '').substring(0, 4);
+        });
+    }
+    
+    // Handle billing address checkbox
+    const sameAsBillingCheckbox = document.getElementById('sameAsBilling');
+    if (sameAsBillingCheckbox) {
+        sameAsBillingCheckbox.addEventListener('change', function() {
+            // Here you would add logic to show/hide billing address form
+            // For now, we'll just log the state
+            console.log('Billing same as shipping:', this.checked);
+        });
+    }
+};
+
+// Update cart count
+function updateCartCount() {
+    cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+    const cartCountElements = document.querySelectorAll('.cart-count');
+    cartCountElements.forEach(element => {
+        element.textContent = cartCount;
+    });
+}
+
+// Render order summary
+function renderOrderSummary() {
+    const orderItemsContainer = document.getElementById('orderItems');
+    orderItemsContainer.innerHTML = '';
+    
+    if (cart.length === 0) {
+        orderItemsContainer.innerHTML = '<p>Your cart is empty</p>';
+        return;
+    }
+    
+    // Add items to summary
+    cart.forEach(item => {
+        const orderItem = document.createElement('div');
+        orderItem.className = 'd-flex justify-content-between align-items-center mb-2';
+        orderItem.innerHTML = `
+            <div>
+                <span class="fw-bold">${item.name}</span>
+                <small class="d-block text-muted">Qty: ${item.quantity}</small>
+            </div>
+            <span>₹${(item.price * item.quantity).toLocaleString()}</span>
+        `;
+        orderItemsContainer.appendChild(orderItem);
+    });
+    
+    // Calculate totals
+    const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    const shipping = subtotal > 0 ? (subtotal >= 50000 ? 0 : 1000) : 0;
+    const tax = subtotal * 0.18;
+    const total = subtotal + shipping + tax;
+    
+    // Update summary values
+    document.getElementById('summarySubtotal').textContent = `₹${subtotal.toLocaleString()}`;
+    document.getElementById('summaryShipping').textContent = shipping === 0 ? 'Free' : `₹${shipping.toLocaleString()}`;
+    document.getElementById('summaryTax').textContent = `₹${tax.toLocaleString()}`;
+    document.getElementById('summaryTotal').textContent = `₹${total.toLocaleString()}`;
+}
+
+// Select payment method
+function selectPayment(paymentId) {
+    // Hide all payment forms
+    document.querySelectorAll('.payment-details').forEach(form => {
+        form.classList.add('d-none');
+    });
+    
+    // Show selected payment form
+    const selectedForm = document.getElementById(paymentId + 'Form');
+    if (selectedForm) {
+        selectedForm.classList.remove('d-none');
+    }
+    
+    // Update visual selection
+    document.querySelectorAll('.payment-method').forEach(method => {
+        method.classList.remove('selected');
+    });
+    
+    const selectedMethod = document.querySelector(`.payment-method:has(#${paymentId})`);
+    if (selectedMethod) {
+        selectedMethod.classList.add('selected');
+    }
+}
+
+// Detect credit card type
+function detectCardType(cardNumber) {
+    const cardInput = document.getElementById('cardNumber');
+    
+    // Remove existing card type classes
+    cardInput.classList.remove('visa', 'mastercard', 'rupay');
+    
+    // Check first digits to determine card type
+    if (cardNumber.startsWith('4')) {
+        cardInput.classList.add('visa');
+    } else if (cardNumber.startsWith('5')) {
+        cardInput.classList.add('mastercard');
+    } else if (cardNumber.startsWith('6')) {
+        cardInput.classList.add('rupay');
+    }
+}
+
+// Validate email format
+function validateEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<script>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+// Validate phone number format (basic)
+function validatePhone(phone) {
+    const re = /^\d{10}$/;
+    return re.test(String(phone));
+}
+
+// Add item to cart (for testing)
+function addTestItems() {
+    const testCart = [
+        { id: 1, name: "Organic Fertilizer - 5kg", price: 1200, quantity: 2 },
+        { id: 2, name: "Drip Irrigation Kit", price: 3500, quantity: 1 },
+        { id: 3, name: "Premium Seeds Pack", price: 850, quantity: 3 }
+    ];
+    
+    localStorage.setItem('smartAgriCart', JSON.stringify(testCart));
+    console.log("Test items added to cart");
+    window.location.reload();
+}
+
+</script>
